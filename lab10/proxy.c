@@ -17,6 +17,7 @@ void format_log_entry(char *logstring, struct sockaddr_in *sockaddr, char *uri, 
 void echo(int connfd);
 void doit(int fd);
 void send_requesthdrs(rio_t *rp, int fd);
+void read_response(rio_t *rp, int clientfd);
 
 /*
  * main - Main routine for the proxy program
@@ -62,8 +63,8 @@ void echo(int connfd)
 
 void doit(int fd)
 {
-    rio_t rio;
     rio_t client_rio;
+    rio_t server_rio;
     int clientfd;
     size_t n;
     struct stat sbuf;
@@ -72,8 +73,8 @@ void doit(int fd)
     char hostname[MAXLINE], pathname[MAXLINE], port[MAXLINE];
 
     // Read request line and headers
-    Rio_readinitb(&rio, fd);
-    n = Rio_readlineb(&rio, buf, MAXLINE);
+    Rio_readinitb(&client_rio, fd);
+    n = Rio_readlineb(&client_rio, buf, MAXLINE);
     printf("Request:\n");
     printf("%s", buf);
     sscanf(buf, "%s %s %s", method, uri, version);
@@ -90,14 +91,14 @@ void doit(int fd)
     printf("get HOSTNAME %s:%s\n", hostname, port);
 
     clientfd = Open_clientfd(hostname, port);
-    Rio_readinitb(&client_rio, clientfd);
+    Rio_readinitb(&server_rio, clientfd);
     Rio_writen(clientfd, buf, n);
-    Rio_writen(clientfd, "\r\n\r\n", 4);
+    Rio_writen(clientfd, "\r\n", 2);
+    read_response(&server_rio, fd);
     //send_requesthdrs(&rio, clientfd);
     // Print response from server
-    while((n = Rio_readlineb(&client_rio, buf, MAXLINE)) != 0) {
-        printf("proxy received %d bytes\n", (int)n);
-        printf("RECEIVE  %s", buf);   // temp
+    while((n = Rio_readlineb(&server_rio, buf, MAXLINE)) != 0) {
+        Rio_writen(fd, buf, n);  // Pass response back to client
     }
 }
 
@@ -112,6 +113,28 @@ void send_requesthdrs(rio_t *rp, int fd)
             printf("send  %s\n",buf);
             Rio_writen(fd, buf, n);
         }
+    }
+}
+
+
+/*
+ * read_response
+ * 
+ * Read response from end server and send it to client, extract the
+ * response size.
+ */
+void read_response(rio_t *rp, int clientfd, int *res_size) {
+    char buf[MAXLINE];
+    size_t n;
+    char *sizestr;
+
+    while((n = Rio_readlineb(rp, buf, MAXLINE)) != 0) {
+        if(strncasecmp(buf, "Content-Length:", 15) == 0) {
+            sizestr = strchr(buf, ' ');
+            sizestr++;
+            res_size = atoi(sizestr);
+        }
+        Rio_writen(fd, buf, n);
     }
 }
 
