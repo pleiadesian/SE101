@@ -14,6 +14,7 @@
 int parse_uri(char *uri, char *target_addr, char *path, char *port);
 void format_log_entry(char *logstring, struct sockaddr_in *sockaddr, char *uri, size_t size);
 
+void echo(int connfd);
 
 /*
  * main - Main routine for the proxy program
@@ -26,7 +27,35 @@ int main(int argc, char **argv)
         exit(0);
     }
 
+    int listenfd, connfd;
+    socklen_t clientlen;
+    struct sockaddr_storage clientaddr;
+    char client_hostname[MAXLINE], client_port[MAXLINE];
+
+    listenfd = Open_listenfd(argv[1]);
+    while(1) {
+        clientlen = sizeof(struct sockaddr_storage);
+        connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen);
+        Getnameinfo((SA *) &clientaddr, clientlen, client_hostname, MAXLINE,
+                client_port, MAXLINE, 0);
+        printf("Connected to (%s %s)\n", client_hostname, client_port);
+        echo(connfd);
+        Close(connfd);
+    }
+
     exit(0);
+}
+
+void echo(int connfd)
+{
+    rio_t rio;
+    char buf[MAXLINE];
+    size_t n;
+    Rio_readinitb(&rio, connfd);
+    if((n = Rio_readlineb(&rio, buf, MAXLINE)) != 0) {
+        printf("server received %d bytes\n", (int)n);
+        Rio_writen(connfd, buf, n);
+    }
 }
 
 
