@@ -15,9 +15,9 @@ int parse_uri(char *uri, char *target_addr, char *path, char *port);
 void format_log_entry(char *logstring, struct sockaddr_in *sockaddr, char *uri, size_t size);
 
 void echo(int connfd);
-void doit(int fd);
+void doit(int fd, size_t *size);
 void send_requesthdrs(rio_t *rp, int fd);
-void read_response(rio_t *rp, int clientfd);
+void read_response(rio_t *rp, int clientfd, size_t *res_size);
 
 /*
  * main - Main routine for the proxy program
@@ -33,7 +33,10 @@ int main(int argc, char **argv)
     int listenfd, connfd, clientfd;
     socklen_t clientlen;
     struct sockaddr_storage clientaddr;
+
     char client_hostname[MAXLINE], client_port[MAXLINE], host[MAXLINE], port[MAXLINE];
+    size_t size;
+    char log_string[MAXLINE];
 
     listenfd = Open_listenfd(argv[1]);
     while(1) {
@@ -42,8 +45,16 @@ int main(int argc, char **argv)
         Getnameinfo((SA *) &clientaddr, clientlen, client_hostname, MAXLINE,
                 client_port, MAXLINE, 0);
         printf("Connected to (%s %s)\n", client_hostname, client_port);
-        doit(connfd);
+        doit(connfd, &size);
+
+        //struct sockaddr_in clientaddr_in;
+        //memset(&clientaddr_in, 0, sizeof(struct sockaddr_in));
+        //clientaddr_in.sin_family = clientaddr.
+
+        format_log_entry(log_string, (struct sockaddr_in *)&clientaddr, client_hostname, size); //
+        printf("%s\n", log_string);
         Close(connfd);
+        size = 0;
     }
 
     exit(0);
@@ -61,7 +72,7 @@ void echo(int connfd)
     }
 }
 
-void doit(int fd)
+void doit(int fd,size_t *size)
 {
     rio_t client_rio;
     rio_t server_rio;
@@ -91,15 +102,13 @@ void doit(int fd)
     printf("get HOSTNAME %s:%s\n", hostname, port);
 
     clientfd = Open_clientfd(hostname, port);
+
+
     Rio_readinitb(&server_rio, clientfd);
     Rio_writen(clientfd, buf, n);
     Rio_writen(clientfd, "\r\n", 2);
-    read_response(&server_rio, fd);
-    //send_requesthdrs(&rio, clientfd);
-    // Print response from server
-    while((n = Rio_readlineb(&server_rio, buf, MAXLINE)) != 0) {
-        Rio_writen(fd, buf, n);  // Pass response back to client
-    }
+    read_response(&server_rio, fd, size);
+
 }
 
 void send_requesthdrs(rio_t *rp, int fd)
@@ -119,11 +128,12 @@ void send_requesthdrs(rio_t *rp, int fd)
 
 /*
  * read_response
- * 
+ *
+ *
  * Read response from end server and send it to client, extract the
  * response size.
  */
-void read_response(rio_t *rp, int clientfd, int *res_size) {
+void read_response(rio_t *rp, int clientfd, size_t *res_size) {
     char buf[MAXLINE];
     size_t n;
     char *sizestr;
@@ -132,9 +142,9 @@ void read_response(rio_t *rp, int clientfd, int *res_size) {
         if(strncasecmp(buf, "Content-Length:", 15) == 0) {
             sizestr = strchr(buf, ' ');
             sizestr++;
-            res_size = atoi(sizestr);
+            *res_size = (size_t) atoi(sizestr);
         }
-        Rio_writen(fd, buf, n);
+        Rio_writen(clientfd, buf, n);
     }
 }
 
