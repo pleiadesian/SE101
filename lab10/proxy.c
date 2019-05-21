@@ -16,6 +16,15 @@ void format_log_entry(char *logstring, struct sockaddr_in *sockaddr, char *uri, 
 
 void doit(int clientfd, size_t *size);
 void redir_response(rio_t *rp, int clientfd, size_t *res_size);
+void *thread(void *vargp);
+
+/* pass args to thread for log printing */
+struct addr_arg {
+    struct sockaddr_storage clientaddr;
+    //char client_hostname[MAXLINE];
+    //char client_port[MAXLINE];
+    int connfd;
+};
 
 /*
  * main - Main routine for the proxy program
@@ -28,27 +37,55 @@ int main(int argc, char **argv)
         exit(0);
     }
 
-    int listenfd, connfd;
+    int listenfd;
     socklen_t clientlen;
-    struct sockaddr_storage clientaddr;
-
-    char client_hostname[MAXLINE], client_port[MAXLINE];
-    size_t size;
-    char log_string[MAXLINE];
+    //struct sockaddr_storage clientaddr;
+    struct addr_arg *clientaddr_arg;
+    pthread_t tid;
 
     listenfd = Open_listenfd(argv[1]);
     while(1) {
         clientlen = sizeof(struct sockaddr_storage);
-        connfd = Accept(listenfd, (SA *)&clientaddr, &clientlen);
-        Getnameinfo((SA *) &clientaddr, clientlen, client_hostname, MAXLINE,
-                client_port, MAXLINE, 0);
-        printf("Connected to (%s %s)\n", client_hostname, client_port);
-        doit(connfd, &size);
-        format_log_entry(log_string, (struct sockaddr_in *)&clientaddr, client_hostname, size); //
-        printf("%s\n", log_string);
-        Close(connfd);
-        size = 0;
+        clientaddr_arg = Malloc(sizeof(struct addr_arg));
+        clientaddr_arg->connfd = Accept(listenfd, (SA *)&clientaddr_arg->clientaddr, &clientlen);
+
+        Pthread_create(&tid, NULL, thread, clientaddr_arg);
     }
+}
+
+/*
+ * thread - Thread routine
+ * create a thread to deal with connection request
+ */
+void *thread(void *vargp)
+{
+    struct addr_arg clientaddr_arg = *((struct addr_arg *)vargp);
+    Pthread_detach(Pthread_self());
+    Free(vargp);
+
+    size_t size;
+    char client_hostname[MAXLINE], client_port[MAXLINE];
+    char log_string[MAXLINE];
+    /*
+    struct sockaddr_in clientaddr;
+    clientaddr.sin_family = AF_INET;
+    clientaddr.sin_port = htons((uint16_t) atoi(clientaddr_arg.client_port));
+    clientaddr.sinaddr =
+*/
+
+    socklen_t clientlen;
+    clientlen = sizeof(struct sockaddr_storage);
+    Getnameinfo((SA *) &clientaddr_arg.clientaddr, clientlen, client_hostname, MAXLINE,
+                client_port, MAXLINE, 0);
+    printf("Connected to (%s %s)\n", client_hostname, client_port);
+
+    doit(clientaddr_arg.connfd, &size);
+    format_log_entry(log_string, (struct sockaddr_in *)& clientaddr_arg.clientaddr, client_hostname, size);
+    printf("%s\n", log_string);
+    Close(clientaddr_arg.connfd);
+    size = 0;
+
+    return NULL;
 }
 
 void doit(int clientfd,size_t *size)
