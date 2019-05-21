@@ -14,10 +14,8 @@
 int parse_uri(char *uri, char *target_addr, char *path, char *port);
 void format_log_entry(char *logstring, struct sockaddr_in *sockaddr, char *uri, size_t size);
 
-void echo(int connfd);
-void doit(int fd, size_t *size);
-void send_requesthdrs(rio_t *rp, int fd);
-void read_response(rio_t *rp, int clientfd, size_t *res_size);
+void doit(int clientfd, size_t *size);
+void redir_response(rio_t *rp, int clientfd, size_t *res_size);
 
 /*
  * main - Main routine for the proxy program
@@ -30,11 +28,11 @@ int main(int argc, char **argv)
         exit(0);
     }
 
-    int listenfd, connfd, clientfd;
+    int listenfd, connfd;
     socklen_t clientlen;
     struct sockaddr_storage clientaddr;
 
-    char client_hostname[MAXLINE], client_port[MAXLINE], host[MAXLINE], port[MAXLINE];
+    char client_hostname[MAXLINE], client_port[MAXLINE];
     size_t size;
     char log_string[MAXLINE];
 
@@ -46,45 +44,24 @@ int main(int argc, char **argv)
                 client_port, MAXLINE, 0);
         printf("Connected to (%s %s)\n", client_hostname, client_port);
         doit(connfd, &size);
-
-        //struct sockaddr_in clientaddr_in;
-        //memset(&clientaddr_in, 0, sizeof(struct sockaddr_in));
-        //clientaddr_in.sin_family = clientaddr.
-
         format_log_entry(log_string, (struct sockaddr_in *)&clientaddr, client_hostname, size); //
         printf("%s\n", log_string);
         Close(connfd);
         size = 0;
     }
-
-    exit(0);
 }
 
-void echo(int connfd)
-{
-    rio_t rio;
-    char buf[MAXLINE];
-    size_t n;
-    Rio_readinitb(&rio, connfd);
-    if((n = Rio_readlineb(&rio, buf, MAXLINE)) != 0) {
-        printf("server received %d bytes\n", (int)n);
-        Rio_writen(connfd, buf, n);
-    }
-}
-
-void doit(int fd,size_t *size)
+void doit(int clientfd,size_t *size)
 {
     rio_t client_rio;
     rio_t server_rio;
-    int clientfd;
+    int serverfd;
     size_t n;
-    struct stat sbuf;
     char buf[MAXLINE], method[MAXLINE], uri[MAXLINE], version[MAXLINE];
-    char filename[MAXLINE], cgiargs[MAXLINE];
     char hostname[MAXLINE], pathname[MAXLINE], port[MAXLINE];
 
     // Read request line and headers
-    Rio_readinitb(&client_rio, fd);
+    Rio_readinitb(&client_rio, clientfd);
     n = Rio_readlineb(&client_rio, buf, MAXLINE);
     printf("Request:\n");
     printf("%s", buf);
@@ -101,39 +78,23 @@ void doit(int fd,size_t *size)
     // Connnect with end server and send request
     printf("get HOSTNAME %s:%s\n", hostname, port);
 
-    clientfd = Open_clientfd(hostname, port);
+    serverfd = Open_clientfd(hostname, port);
 
-
-    Rio_readinitb(&server_rio, clientfd);
-    Rio_writen(clientfd, buf, n);
-    Rio_writen(clientfd, "\r\n", 2);
-    read_response(&server_rio, fd, size);
+    Rio_readinitb(&server_rio, serverfd);
+    Rio_writen(serverfd, buf, n);
+    Rio_writen(serverfd, "\r\n", 2);
+    redir_response(&server_rio, clientfd, size);
 
 }
-
-void send_requesthdrs(rio_t *rp, int fd)
-{
-    char buf[MAXLINE];
-    size_t n;
-
-    Rio_readlineb(rp, buf, MAXLINE);
-    while(strcmp(buf, "\r\n")) {
-        if((n = Rio_readlineb(rp, buf, MAXLINE)) != 0 ) {
-            printf("send  %s\n",buf);
-            Rio_writen(fd, buf, n);
-        }
-    }
-}
-
 
 /*
- * read_response
+ * redir_response
  *
  *
- * Read response from end server and send it to client, extract the
+ * Read response from end server and forward it to client, extract the
  * response size.
  */
-void read_response(rio_t *rp, int clientfd, size_t *res_size) {
+void redir_response(rio_t *rp, int clientfd, size_t *res_size) {
     char buf[MAXLINE];
     size_t n;
     char *sizestr;
