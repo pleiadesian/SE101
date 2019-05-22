@@ -29,10 +29,10 @@ ssize_t Rio_readn_w(int fd, void *usrbuf, size_t n)
     return size;
 }
 
-ssize_t Rio_readlineb_w(int fd, void *usrbuf, size_t maxlen)
+ssize_t Rio_readlineb_w(rio_t *rp, void *usrbuf, size_t maxlen)
 {
     ssize_t size;
-    if ((size = Rio_readlineb(fd, usrbuf, maxlen)) < 0)
+    if ((size = Rio_readlineb(rp, usrbuf, maxlen)) < 0)
     {
         size = 0;
         fprintf(stderr, "Rio_readlineb error");
@@ -131,6 +131,8 @@ void doit(int clientfd,size_t *size)
         return;
     sscanf(buf, "%s %s %s", method, uri, version);
 
+    printf("req:%s", buf);
+
     if (strcasecmp(method, "GET")) {
         *size = 0;
         return;
@@ -148,6 +150,7 @@ void doit(int clientfd,size_t *size)
     //printf("request:%s",buf);
 
     // Connnect with end server and send request
+    printf("conn server: %s %s",hostname, port);
     serverfd = Open_clientfd(hostname, port);
     Rio_readinitb(&server_rio, serverfd);
 
@@ -169,7 +172,6 @@ void doit(int clientfd,size_t *size)
             break;
         }
     }
-    Rio_writen_w(clientfd, "test\r\n", 6);
     Close(serverfd);
     Close(clientfd);
 }

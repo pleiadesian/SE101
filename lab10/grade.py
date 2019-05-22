@@ -101,6 +101,7 @@ def start_server():
     else:
         server.real_pid = int(subprocess.check_output("pgrep -P %d" % (server.pid), shell=True))
     port = int(server.readline())
+    print("server port: %d" % port)
     server.port = port
     server.sendline("accept")
     return (port, server)
@@ -119,6 +120,8 @@ def start_client(port):
     if strace:
         proc = pexpect.spawn("bash -c 'stty -echo -icanon; strace -f -tt ./client %s %d 2>>client-strace.log'" % (ip, port), timeout=DEFAULT_TIMEOUT)
     else:
+        print("client  %s %d" % (ip, port[0]))
+        port = port[0]
         proc = pexpect.spawn("bash -c 'stty -echo -icanon; ./client %s %d'" % (ip, port), timeout=DEFAULT_TIMEOUT)
     proc.expect("ready\r\n", timeout=1)
     proc.ip = ip
@@ -169,8 +172,8 @@ def check_proxy_alive(proxy):
             raise ProxyDieException()
 
 def helper_send(proc, s):
-    print("send: %d %s" % (len(s), s))
-    print("send: %d %s" % (len(s), binascii.hexlify(s)))
+    #print("send: %d %s" % (len(s), s))
+    #print("send: %d %s" % (len(s), binascii.hexlify(s)))
     proc.sendline("send %d" % (len(s)))
     proc.sendline(binascii.hexlify(s))
 
@@ -207,8 +210,8 @@ def helper_readline(proc, timeout=-1):
         return None
     else:
         try:
-            print("resp: %s" % resp)
-            print("resp: %s" % binascii.unhexlify(resp.strip()))
+        #    print("resp: %s" % resp)
+        #    print("resp: %s" % binascii.unhexlify(resp.strip()))
             return binascii.unhexlify(resp.strip())
         except:
             print repr(resp)

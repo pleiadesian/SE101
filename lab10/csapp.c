@@ -807,10 +807,8 @@ static ssize_t rio_read(rio_t *rp, char *usrbuf, size_t n)
     int cnt;
 
     while (rp->rio_cnt <= 0) {  /* Refill if buf is empty */
-        printf("rio_read %d %s\n",rp->rio_fd, rp->rio_buf);
 	rp->rio_cnt = read(rp->rio_fd, rp->rio_buf, 
 			   sizeof(rp->rio_buf));
-	printf("read block\n");
 	if (rp->rio_cnt < 0) {
 	    if (errno != EINTR) /* Interrupted by sig handler return */
 		return -1;
@@ -855,7 +853,6 @@ ssize_t rio_readnb(rio_t *rp, void *usrbuf, size_t n)
     char *bufp = usrbuf;
     
     while (nleft > 0) {
-        printf("nleft %lu",nleft);
 	if ((nread = rio_read(rp, bufp, nleft)) < 0) 
             return -1;          /* errno set by read() */ 
 	else if (nread == 0)
