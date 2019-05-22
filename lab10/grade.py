@@ -169,6 +169,8 @@ def check_proxy_alive(proxy):
             raise ProxyDieException()
 
 def helper_send(proc, s):
+    print("send: %d %s" % (len(s), s))
+    print("send: %d %s" % (len(s), binascii.hexlify(s)))
     proc.sendline("send %d" % (len(s)))
     proc.sendline(binascii.hexlify(s))
 
@@ -199,18 +201,16 @@ def proxy_request(method, server_ip, server_port, path):
     return "%s %s HTTP/1.1\r\n" % (method, proxy_uri(server_ip, server_port, path))
 
 def helper_readline(proc, timeout=-1):
-    print("before sendline")
     proc.sendline("readline")
     resp = proc.readline()
-    print("before if %s\n" % binascii.unhexlify(resp.strip()))
     if resp == "error\r\n":
         return None
     else:
         try:
-            print("binascii")
+            print("resp: %s" % resp)
+            print("resp: %s" % binascii.unhexlify(resp.strip()))
             return binascii.unhexlify(resp.strip())
         except:
-            print("resp")
             print repr(resp)
             raise
 
@@ -294,17 +294,14 @@ def expect_req(proc, req, timeout=-1):
         line = helper_readline(proc)
         if line != "%s %s HTTP/1.1\r\n" % (req.method, req.path):
             raise MismatchException("Server got wrong request line", "%s %s HTTP/1.1" % (req.method, req.path), line)
-        print("before scan header")
         for header in req.headers:
             line = helper_readline(proc)
-            print("line:")
             if line != "%s: %s\r\n" % (header[0], header[1]):
                 raise MismatchException("Server got wrong header line", "%s: %s" % (header[0], header[1]), line)
         line = helper_readline(proc)
         if line != "\r\n":
             raise MismatchException("Server got wrong request end line", "", line)
         if req.body != None:
-            print("req.body not null")
             recv_body = helper_read(proc, len(req.body), timeout=timeout)
             if req.body != recv_body:
                 raise MismatchException(
@@ -350,6 +347,7 @@ def send_resp_crash(proc, resp, crash_point):
     helper_send(proc, resp.raw[:crash_point])
 
 def expect_resp_header_only(proc, resp, timeout=-1):
+    print("expect_header_only")
     if proc != None:
         line = helper_readline(proc)
         if line != resp.head_line:
@@ -363,6 +361,7 @@ def expect_resp_header_only(proc, resp, timeout=-1):
             raise MismatchException("Client got wrong response header end line", "", line)
 
 def expect_resp(proc, resp, timeout=-1):
+    print("expect_resp")
     if proc != None:
         expect_resp_header_only(proc, resp, timeout)
         if resp.body != None:
@@ -468,13 +467,10 @@ def do_part1_1(server, server_port, client, proxy):
     server_ip = random.choice(possible_ip)
     req = HttpRequest("GET", server_ip, server_port, "/")
     send_req(client, req)
-    print("send req")
     expect_req(server, req)
-    print("req end")
     resp = HttpResponse(random_status(), random_bytes(random.randint(300, 500)))
     send_resp(server, resp)
     expect_resp(client, resp)
-    print("resp end")
     expect_log(proxy, client.ip, proxy_uri(server_ip, server_port, "/"), len(resp.raw))
 
 # Check GET without parameter
