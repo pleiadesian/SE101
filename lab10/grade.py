@@ -120,8 +120,6 @@ def start_client(port):
     if strace:
         proc = pexpect.spawn("bash -c 'stty -echo -icanon; strace -f -tt ./client %s %d 2>>client-strace.log'" % (ip, port), timeout=DEFAULT_TIMEOUT)
     else:
-        print("client  %s %d" % (ip, port[0]))
-        port = port[0]
         proc = pexpect.spawn("bash -c 'stty -echo -icanon; ./client %s %d'" % (ip, port), timeout=DEFAULT_TIMEOUT)
     proc.expect("ready\r\n", timeout=1)
     proc.ip = ip
@@ -350,7 +348,6 @@ def send_resp_crash(proc, resp, crash_point):
     helper_send(proc, resp.raw[:crash_point])
 
 def expect_resp_header_only(proc, resp, timeout=-1):
-    print("expect_header_only")
     if proc != None:
         line = helper_readline(proc)
         if line != resp.head_line:
@@ -364,7 +361,6 @@ def expect_resp_header_only(proc, resp, timeout=-1):
             raise MismatchException("Client got wrong response header end line", "", line)
 
 def expect_resp(proc, resp, timeout=-1):
-    print("expect_resp")
     if proc != None:
         expect_resp_header_only(proc, resp, timeout)
         if resp.body != None:
@@ -937,7 +933,7 @@ def main():
         quiet = True
     strace = args.strace
     verbose = args.verbose
-    outside_proxy = args.outside
+    outside_proxy = args.outside[0]
     if args.only == None:
         args.only = ["all"]
 

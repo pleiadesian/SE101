@@ -21,7 +21,7 @@ void *thread(void *vargp);
 ssize_t Rio_readn_w(int fd, void *usrbuf, size_t n)
 {
     ssize_t size;
-    if ((size = Rio_readn(fd, usrbuf, n)) < 0)
+    if ((size = rio_readn(fd, usrbuf, n)) < 0)
     {
         size = 0;
         fprintf(stderr, "Rio_readn error");
@@ -29,10 +29,21 @@ ssize_t Rio_readn_w(int fd, void *usrbuf, size_t n)
     return size;
 }
 
+ssize_t Rio_readnb_w(rio_t *rp, void *usrbuf, size_t n)
+{
+    ssize_t size;
+    if ((size = rio_readnb(rp, usrbuf, n)) < 0)
+    {
+        size = 0;
+        fprintf(stderr, "Rio_readnb error");
+    }
+    return size;
+}
+
 ssize_t Rio_readlineb_w(rio_t *rp, void *usrbuf, size_t maxlen)
 {
     ssize_t size;
-    if ((size = Rio_readlineb(rp, usrbuf, maxlen)) < 0)
+    if ((size = rio_readlineb(rp, usrbuf, maxlen)) < 0)
     {
         size = 0;
         fprintf(stderr, "Rio_readlineb error");
@@ -42,7 +53,7 @@ ssize_t Rio_readlineb_w(rio_t *rp, void *usrbuf, size_t maxlen)
 
 void Rio_writen_w(int fd, void *usrbuf, size_t n)
 {
-    if (Rio_readn(fd, usrbuf, n) != n)
+    if (rio_writen(fd, usrbuf, n) != n)
     {
         fprintf(stderr, "Rio_writen error");
     }
@@ -81,7 +92,7 @@ int main(int argc, char **argv)
         clientlen = sizeof(struct sockaddr_storage);
         clientaddr_arg = Malloc(sizeof(struct addr_arg));
         clientaddr_arg->connfd = Accept(listenfd, (SA *)&clientaddr_arg->clientaddr, &clientlen);
-
+printf("connected");
         Pthread_create(&tid, NULL, thread, clientaddr_arg);
     }
 }
@@ -133,7 +144,7 @@ void doit(int clientfd,size_t *size)
 
     printf("req:%s", buf);
 
-    if (strcasecmp(method, "GET")) {
+    if (strcasecmp(method, "GET") && strcasecmp(method, "POST")) {
         *size = 0;
         return;
     }
@@ -142,36 +153,73 @@ void doit(int clientfd,size_t *size)
     parse_uri(uri, hostname, pathname, port);
     memset(buf, 0, MAXLINE);
 
+    // Connnect with end server and send request
+    //printf("conn server: %s %s\n",hostname, port);
+    serverfd = Open_clientfd(hostname, port);
+
     int bufn = sprintf(buf, "%s /%s %s\r\n", method, pathname, version);
     if (bufn == -1) {
         return;
     }
+    //printf("send req: %s to serverfd: %d with bufn: %d\n", buf, serverfd, bufn);
+    Rio_writen_w(serverfd, buf, strlen(buf));  // send request to server
     //printf("get HOSTNAME %s:%s\n", hostname, port);
     //printf("request:%s",buf);
 
-    // Connnect with end server and send request
-    printf("conn server: %s %s",hostname, port);
-    serverfd = Open_clientfd(hostname, port);
-    Rio_readinitb(&server_rio, serverfd);
 
-    Rio_writen_w(serverfd, buf, bufn);  // send request to server
+    // define size to count req and resp total size (header and body)
+    int req_size = 0, resp_size = 0;
 
     // Send request header
+    printf("req header\n");
     while((n = Rio_readlineb_w(&client_rio, buf, MAXLINE)) != 0) {
-        Rio_writen_w(serverfd, buf, n);
+        printf("write block for buf: %s\n", buf);
+        Rio_writen_w(serverfd, buf, strlen(buf));
+        if(!strncasecmp(buf, "Content-Length", 14)) {
+            req_size = atoi(buf + 15);
+        }
         if (!strcmp(buf, "\r\n")) {
             break;
         }
+        printf("write end\n");
     }
-    Rio_writen_w(serverfd, "\r\n", 2);
 
+    // Send request body
+    printf("req body size : %d\n", req_size);
+    if (req_size > 0) {
+        for (int i = 0; i < req_size; i++) {
+            printf("read byte\n");
+            Rio_readnb_w(&client_rio, buf, 1);
+            printf("write byte: %s\n", buf);
+            Rio_writen_w(serverfd, buf, 1);
+            printf("write byte end\n");
+        }
+    }
 
+    Rio_readinitb(&server_rio, serverfd);
+
+    // Send response header
+    printf("resp header\n");
     while((n = Rio_readlineb_w(&server_rio, buf, MAXLINE)) != 0) {
-        Rio_writen_w(clientfd, buf, n);
+        printf("write resp for buf: %s\n", buf);
+        Rio_writen_w(clientfd, buf, strlen(buf));
+        if(!strncasecmp(buf, "Content-Length", 14)) {
+            resp_size = atoi(buf + 15);
+        }
         if (!strcmp(buf, "\r\n")) {
             break;
         }
     }
+
+    // Send response body
+    printf("resp body size : %d\n", resp_size);
+    if (resp_size > 0) {
+        for (int i = 0; i < resp_size; i++) {
+            Rio_readnb_w(&server_rio, buf, 1);
+            Rio_writen_w(clientfd, buf, 1);
+        }
+    }
+
     Close(serverfd);
     Close(clientfd);
 }
