@@ -101,7 +101,6 @@ def start_server():
     else:
         server.real_pid = int(subprocess.check_output("pgrep -P %d" % (server.pid), shell=True))
     port = int(server.readline())
-    print("server port: %d" % port)
     server.port = port
     server.sendline("accept")
     return (port, server)
@@ -170,8 +169,6 @@ def check_proxy_alive(proxy):
             raise ProxyDieException()
 
 def helper_send(proc, s):
-    #print("send: %d %s" % (len(s), s))
-    #print("send: %d %s" % (len(s), binascii.hexlify(s)))
     proc.sendline("send %d" % (len(s)))
     proc.sendline(binascii.hexlify(s))
 
@@ -208,8 +205,6 @@ def helper_readline(proc, timeout=-1):
         return None
     else:
         try:
-        #    print("resp: %s" % resp)
-        #    print("resp: %s" % binascii.unhexlify(resp.strip()))
             return binascii.unhexlify(resp.strip())
         except:
             print repr(resp)
@@ -926,14 +921,14 @@ def main():
     parser.add_argument("--strace", action="store_true", help="enable strace")
     args = parser.parse_args()
     if args.ta:
-        args.only = "all"
+        args.only = ["all"]
         args.outside = None
         args.verbose = False
         args.strace = False
         quiet = True
     strace = args.strace
     verbose = args.verbose
-    outside_proxy = args.outside[0]
+    outside_proxy = args.outside
     if args.only == None:
         args.only = ["all"]
 
