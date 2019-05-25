@@ -298,10 +298,7 @@ def expect_req(proc, req, timeout=-1):
         if line != "\r\n":
             raise MismatchException("Server got wrong request end line", "", line)
         if req.body != None:
-            #print("expect req.body: %s\n" % binascii.hexlify(req.body.strip()))
-            print("need req.body len:%d" % len(req.body))
             recv_body = helper_read(proc, len(req.body), timeout=timeout)
-            #print("get recv_body: %s\n" % binascii.hexlify(recv_body.strip()))
             if req.body != recv_body:
                 raise MismatchException(
                         "Server got wrong HTTP body",
@@ -546,7 +543,6 @@ def do_part1_4(server, server_port, client, proxy, in_part1_7=False):
     body += random_string(random.randint(10, 20))
     body += "\r\n"
     body += random_bytes(random.randint(300, 500))
-    print("body %s" % (body))
     req = HttpRequest("POST", server_ip, server_port, path, body)
 
     # crash in request
@@ -579,7 +575,6 @@ def do_part1_4(server, server_port, client, proxy, in_part1_7=False):
     resp = HttpResponse(random_status(), random_bytes(random.randint(10000, 13000)))
 
     # crash in response
-    print("response\n%s\n\n" % req.raw)
     send_req(client, req)
     expect_req(server, req)
     send_resp_crash(server, resp, random.randint(1, resp.head_line_end - 1))
@@ -591,7 +586,6 @@ def do_part1_4(server, server_port, client, proxy, in_part1_7=False):
         restart_sc(server, client)
 
     # crash in response header
-    print("response header\n")
     send_req(client, req)
     expect_req(server, req)
     send_resp_crash(server, resp, random.randint(resp.head_line_end, resp.header_end - 1))
@@ -603,7 +597,6 @@ def do_part1_4(server, server_port, client, proxy, in_part1_7=False):
         restart_sc(server, client)
 
     # crash in response body
-    print("response body\n")
     send_req(client, req)
     expect_req(server, req)
     send_resp_crash(server, resp, random.randint(resp.header_end, resp.body_end - 1))
@@ -935,7 +928,7 @@ def main():
         quiet = True
     strace = args.strace
     verbose = args.verbose
-    outside_proxy = args.outside[0]
+    outside_proxy = args.outside
     if args.only == None:
         args.only = ["all"]
 
