@@ -137,6 +137,11 @@ void doit(int clientfd,char *url_log,size_t *size)
         Close(clientfd);
         return;
     }
+    
+if (buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
+	Close(clientfd);
+	return;
+}
 
     if (sscanf(buf, "%s %s %s", method, uri, version) < 3) {
         Close(clientfd);
@@ -176,7 +181,7 @@ void doit(int clientfd,char *url_log,size_t *size)
     Rio_writen_w(serverfd, buf, strlen(buf));
 
     /* Send request header */
-    while((n = Rio_readlineb_w(&client_rio, buf, MAXLINE)) > 0) {
+    while((n = Rio_readlineb_w(&client_rio, buf, MAXLINE-1)) > 0) {
         Rio_writen_w(serverfd, buf, strlen(buf));
         if(!strncasecmp(buf, "Content-Length", 14)) {
             req_size = atoi(buf + 15);
@@ -202,7 +207,7 @@ void doit(int clientfd,char *url_log,size_t *size)
     Rio_readinitb(&server_rio, serverfd);
 
     /* Send response header */
-    while((n = Rio_readlineb_w(&server_rio, buf, MAXLINE)) > 0) {
+    while((n = Rio_readlineb_w(&server_rio, buf, MAXLINE-1)) > 0) {
         resp_total_size += n;
         Rio_writen_w(clientfd, buf, strlen(buf));
         if(!strncasecmp(buf, "Content-Length", 14)) {
