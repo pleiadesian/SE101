@@ -138,7 +138,7 @@ void doit(int clientfd,char *url_log,size_t *size)
         return;
     }
     
-if (buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
+if (strlen(buf) < 2 || buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
 	Close(clientfd);
 	return;
 }
@@ -150,10 +150,6 @@ if (buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
     strcpy(url_log, uri);
 
     if (strcmp(version, "HTTP/1.1")) {
-        Close(clientfd);
-        return;
-    }
-    if (strcasecmp(method, "GET") && strcasecmp(method, "POST")) {
         Close(clientfd);
         return;
     }
@@ -181,7 +177,7 @@ if (buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
     Rio_writen_w(serverfd, buf, strlen(buf));
 
     /* Send request header */
-    while((n = Rio_readlineb_w(&client_rio, buf, MAXLINE-1)) > 0) {
+    while((n = Rio_readlineb_w(&client_rio, buf, MAXLINE)) > 0) {
         Rio_writen_w(serverfd, buf, strlen(buf));
         if(!strncasecmp(buf, "Content-Length", 14)) {
             req_size = atoi(buf + 15);
@@ -192,22 +188,30 @@ if (buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
     }
 
     /* Send request body */
-    if (req_size > 0) {
-        for (int i = 0; i < req_size; i++) {
-            /* Deal with read error as encountering EOF */
-            if ((n = Rio_readnb_w(&client_rio, buf, 1)) == 0) {
-                break;
-            }
+    if (strcmp("GET", method)) {
+        if (req_size > 0) {
+            for (int i = 0; i < req_size; i++) {
+                /* Deal with read error as encountering EOF */
+                if ((n = Rio_readnb_w(&client_rio, buf, 1)) == 0) {
+                    break;
+                }
 
-            Rio_writen_w(serverfd, buf, 1);
-          //  printf("writen request body: %s %d TO %d",buf,i,serverfd);
+                Rio_writen_w(serverfd, buf, 1);
+            }
+        }else{
+            while ((n = Rio_readlineb_w(&client_rio, buf, MAXLINE)) > 0) {
+                Rio_writen_w(serverfd, buf, n);
+		if(!strcmp(buf, "0\r\n")) {
+                    break;
+		}
+	    }
         }
     }
 
     Rio_readinitb(&server_rio, serverfd);
 
     /* Send response header */
-    while((n = Rio_readlineb_w(&server_rio, buf, MAXLINE-1)) > 0) {
+    while((n = Rio_readlineb_w(&server_rio, buf, MAXLINE)) > 0) {
         resp_total_size += n;
         Rio_writen_w(clientfd, buf, strlen(buf));
         if(!strncasecmp(buf, "Content-Length", 14)) {
@@ -227,6 +231,15 @@ if (buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
             resp_total_size++;
             Rio_writen_w(clientfd, buf, 1);
         }
+    }else{
+        while ((n = Rio_readlineb_w(&server_rio, buf, MAXLINE)) > 0) {
+            Rio_writen_w(clientfd, buf, n);
+	    resp_total_size++;
+	    if(!strcmp(buf, "0\r\n")) {
+                break;
+	    }
+	}
+
     }
     *size = resp_total_size;
 
