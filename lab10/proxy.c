@@ -137,11 +137,11 @@ void doit(int clientfd,char *url_log,size_t *size)
         Close(clientfd);
         return;
     }
-    
-if (strlen(buf) < 2 || buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
-	Close(clientfd);
-	return;
-}
+
+    if (strlen(buf) < 2 || buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
+        Close(clientfd);
+        return;
+    }
 
     if (sscanf(buf, "%s %s %s", method, uri, version) < 3) {
         Close(clientfd);
@@ -197,14 +197,15 @@ if (strlen(buf) < 2 || buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
                 }
 
                 Rio_writen_w(serverfd, buf, 1);
+                //  printf("writen request body: %s %d TO %d",buf,i,serverfd);
             }
         }else{
             while ((n = Rio_readlineb_w(&client_rio, buf, MAXLINE)) > 0) {
                 Rio_writen_w(serverfd, buf, n);
-		if(!strcmp(buf, "0\r\n")) {
+                if(!strcmp(buf, "0\r\n")) {
                     break;
-		}
-	    }
+                }
+            }
         }
     }
 
@@ -234,12 +235,11 @@ if (strlen(buf) < 2 || buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
     }else{
         while ((n = Rio_readlineb_w(&server_rio, buf, MAXLINE)) > 0) {
             Rio_writen_w(clientfd, buf, n);
-	    resp_total_size++;
-	    if(!strcmp(buf, "0\r\n")) {
+            resp_total_size++;
+            if(!strcmp(buf, "0\r\n")) {
                 break;
-	    }
-	}
-
+            }
+        }
     }
     *size = resp_total_size;
 
