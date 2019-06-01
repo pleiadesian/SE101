@@ -1,0 +1,492 @@
+19:58:17.273245 execve("./server", ["./server"], 0x7ffe071c8930 /* 57 vars */) = 0
+19:58:17.274441 brk(NULL)               = 0x55cde2ee0000
+19:58:17.274693 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:17.274932 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+19:58:17.275062 openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+19:58:17.275190 fstat(3, {st_mode=S_IFREG|0644, st_size=132087, ...}) = 0
+19:58:17.275316 mmap(NULL, 132087, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7ff50523b000
+19:58:17.275415 close(3)                = 0
+19:58:17.275516 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:17.275630 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3
+19:58:17.275729 read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0000b\0\0\0\0\0\0"..., 832) = 832
+19:58:17.275825 fstat(3, {st_mode=S_IFREG|0755, st_size=144976, ...}) = 0
+19:58:17.275915 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7ff505239000
+19:58:17.276049 mmap(NULL, 2221184, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7ff504e16000
+19:58:17.276142 mprotect(0x7ff504e30000, 2093056, PROT_NONE) = 0
+19:58:17.276245 mmap(0x7ff50502f000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x19000) = 0x7ff50502f000
+19:58:17.276455 mmap(0x7ff505031000, 13440, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7ff505031000
+19:58:17.276661 close(3)                = 0
+19:58:17.276861 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:17.277027 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+19:58:17.277160 read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\260\34\2\0\0\0\0\0"..., 832) = 832
+19:58:17.277267 fstat(3, {st_mode=S_IFREG|0755, st_size=2030544, ...}) = 0
+19:58:17.277366 mmap(NULL, 4131552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7ff504a25000
+19:58:17.277464 mprotect(0x7ff504c0c000, 2097152, PROT_NONE) = 0
+19:58:17.277562 mmap(0x7ff504e0c000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) = 0x7ff504e0c000
+19:58:17.277671 mmap(0x7ff504e12000, 15072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7ff504e12000
+19:58:17.277776 close(3)                = 0
+19:58:17.277900 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7ff505236000
+19:58:17.277997 arch_prctl(ARCH_SET_FS, 0x7ff505236740) = 0
+19:58:17.278209 mprotect(0x7ff504e0c000, 16384, PROT_READ) = 0
+19:58:17.278304 mprotect(0x7ff50502f000, 4096, PROT_READ) = 0
+19:58:17.278440 mprotect(0x55cde2799000, 4096, PROT_READ) = 0
+19:58:17.278525 mprotect(0x7ff50525c000, 4096, PROT_READ) = 0
+19:58:17.278607 munmap(0x7ff50523b000, 132087) = 0
+19:58:17.278723 set_tid_address(0x7ff505236a10) = 14481
+19:58:17.278799 set_robust_list(0x7ff505236a20, 24) = 0
+19:58:17.278884 rt_sigaction(SIGRTMIN, {sa_handler=0x7ff504e1bcb0, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7ff504e28890}, NULL, 8) = 0
+19:58:17.278980 rt_sigaction(SIGRT_1, {sa_handler=0x7ff504e1bd50, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7ff504e28890}, NULL, 8) = 0
+19:58:17.279065 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+19:58:17.279158 prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+19:58:17.279298 rt_sigaction(SIGUSR1, {sa_handler=0x55cde2595366, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0x7ff504e28890}, NULL, 8) = 0
+19:58:17.279404 fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+19:58:17.279575 brk(NULL)               = 0x55cde2ee0000
+19:58:17.279649 brk(0x55cde2f01000)     = 0x55cde2f01000
+19:58:17.279736 write(1, "ready\n", 6)  = 6
+19:58:17.279861 socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE) = 3
+19:58:17.279983 bind(3, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 0
+19:58:17.280084 getsockname(3, {sa_family=AF_NETLINK, nl_pid=14481, nl_groups=00000000}, [12]) = 0
+19:58:17.280218 sendto(3, {{len=20, type=RTM_GETADDR, flags=NLM_F_REQUEST|NLM_F_DUMP, seq=1558526297, pid=0}, {ifa_family=AF_UNSPEC, ...}}, 20, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 20
+19:58:17.325530 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=76, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526297, pid=14481}, {ifa_family=AF_INET, ifa_prefixlen=8, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 127.0.0.1}, {{nla_len=8, nla_type=IFA_LOCAL}, 127.0.0.1}, {{nla_len=7, nla_type=IFA_LABEL}, "lo"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}]}, {{len=88, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526297, pid=14481}, {ifa_family=AF_INET, ifa_prefixlen=16, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_LOCAL}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_BROADCAST}, 10.162.255.255}, {{nla_len=11, nla_type=IFA_LABEL}, "wlp2s0"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_NOPREFIXROUTE}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=9779, ifa_valid=9779, cstamp=1131670, tstamp=1131957}}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 164
+19:58:17.325724 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526297, pid=14481}, {ifa_family=AF_INET6, ifa_prefixlen=128, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, ::1}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526297, pid=14481}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_SECONDARY, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3dcd:488a:f597:2c5c}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14397, ifa_valid=86397, cstamp=1131935, tstamp=1593457}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_SECONDARY}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526297, pid=14481}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3a6b:fb72:809:916b}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14397, ifa_valid=86397, cstamp=1131935, tstamp=1593457}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_MANAGETEMPADDR|IFA_F_NOPREFIXROUTE}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526297, pid=14481}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_LINK, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, fe80::a088:372b:b411:c6bd}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=1131667, tstamp=1593457}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT|IFA_F_NOPREFIXROUTE}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 288
+19:58:17.325886 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base={{len=20, type=NLMSG_DONE, flags=NLM_F_MULTI, seq=1558526297, pid=14481}, 0}, iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 20
+19:58:17.325957 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 4
+19:58:17.326001 connect(4, {sa_family=AF_UNIX, sun_path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+19:58:17.326056 close(4)                = 0
+19:58:17.326112 close(3)                = 0
+19:58:17.326164 openat(AT_FDCWD, "/etc/gai.conf", O_RDONLY|O_CLOEXEC) = 3
+19:58:17.326225 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+19:58:17.326265 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+19:58:17.326311 read(3, "# Configuration for getaddrinfo("..., 4096) = 2584
+19:58:17.326370 read(3, "", 4096)       = 0
+19:58:17.326411 close(3)                = 0
+19:58:17.326448 futex(0x7ff504e13044, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+19:58:17.326486 socket(AF_INET6, SOCK_DGRAM|SOCK_CLOEXEC, IPPROTO_IP) = 3
+19:58:17.326527 connect(3, {sa_family=AF_INET6, sin6_port=htons(0), inet_pton(AF_INET6, "::", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, 28) = 0
+19:58:17.326700 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(60611), inet_pton(AF_INET6, "::1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+19:58:17.326779 connect(3, {sa_family=AF_UNSPEC, sa_data="\0\0\0\0\0\0\0\0\0\0\0\0\0\0"}, 16) = 0
+19:58:17.326825 connect(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+19:58:17.326870 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(58419), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+19:58:17.326913 close(3)                = 0
+19:58:17.326954 socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 3
+19:58:17.326992 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+19:58:17.327029 bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+19:58:17.327067 listen(3, 1024)         = 0
+19:58:17.327101 getsockname(3, {sa_family=AF_INET, sin_port=htons(43323), sin_addr=inet_addr("0.0.0.0")}, [16]) = 0
+19:58:17.327149 write(1, "43323\n", 6)  = 6
+19:58:17.327194 fstat(0, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+19:58:17.327234 read(0, "accept\n", 1024) = 7
+19:58:17.377988 accept(3, NULL, NULLstrace: Process 14481 detached
+ <detached ...>
+19:58:23.803863 execve("./server", ["./server"], 0x7fff63154d90 /* 57 vars */) = 0
+19:58:23.804280 brk(NULL)               = 0x55e33f6b3000
+19:58:23.804353 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:23.804382 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+19:58:23.804407 openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+19:58:23.804431 fstat(3, {st_mode=S_IFREG|0644, st_size=132087, ...}) = 0
+19:58:23.804454 mmap(NULL, 132087, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f0fd39ad000
+19:58:23.804477 close(3)                = 0
+19:58:23.804499 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:23.804525 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3
+19:58:23.804549 read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0000b\0\0\0\0\0\0"..., 832) = 832
+19:58:23.804571 fstat(3, {st_mode=S_IFREG|0755, st_size=144976, ...}) = 0
+19:58:23.804618 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f0fd39ab000
+19:58:23.804646 mmap(NULL, 2221184, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f0fd3588000
+19:58:23.804685 mprotect(0x7f0fd35a2000, 2093056, PROT_NONE) = 0
+19:58:23.804710 mmap(0x7f0fd37a1000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x19000) = 0x7f0fd37a1000
+19:58:23.804738 mmap(0x7f0fd37a3000, 13440, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f0fd37a3000
+19:58:23.804763 close(3)                = 0
+19:58:23.804786 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:23.804811 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+19:58:23.804836 read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\260\34\2\0\0\0\0\0"..., 832) = 832
+19:58:23.804858 fstat(3, {st_mode=S_IFREG|0755, st_size=2030544, ...}) = 0
+19:58:23.804879 mmap(NULL, 4131552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f0fd3197000
+19:58:23.804901 mprotect(0x7f0fd337e000, 2097152, PROT_NONE) = 0
+19:58:23.804924 mmap(0x7f0fd357e000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) = 0x7f0fd357e000
+19:58:23.804949 mmap(0x7f0fd3584000, 15072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f0fd3584000
+19:58:23.804979 close(3)                = 0
+19:58:23.805008 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f0fd39a8000
+19:58:23.805031 arch_prctl(ARCH_SET_FS, 0x7f0fd39a8740) = 0
+19:58:23.805080 mprotect(0x7f0fd357e000, 16384, PROT_READ) = 0
+19:58:23.805105 mprotect(0x7f0fd37a1000, 4096, PROT_READ) = 0
+19:58:23.805140 mprotect(0x55e33de1f000, 4096, PROT_READ) = 0
+19:58:23.805162 mprotect(0x7f0fd39ce000, 4096, PROT_READ) = 0
+19:58:23.805184 munmap(0x7f0fd39ad000, 132087) = 0
+19:58:23.805214 set_tid_address(0x7f0fd39a8a10) = 14497
+19:58:23.805234 set_robust_list(0x7f0fd39a8a20, 24) = 0
+19:58:23.805257 rt_sigaction(SIGRTMIN, {sa_handler=0x7f0fd358dcb0, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7f0fd359a890}, NULL, 8) = 0
+19:58:23.805282 rt_sigaction(SIGRT_1, {sa_handler=0x7f0fd358dd50, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7f0fd359a890}, NULL, 8) = 0
+19:58:23.805303 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+19:58:23.805327 prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+19:58:23.805364 rt_sigaction(SIGUSR1, {sa_handler=0x55e33dc1b366, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0x7f0fd359a890}, NULL, 8) = 0
+19:58:23.805392 fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+19:58:23.805436 brk(NULL)               = 0x55e33f6b3000
+19:58:23.805455 brk(0x55e33f6d4000)     = 0x55e33f6d4000
+19:58:23.805478 write(1, "ready\n", 6)  = 6
+19:58:23.805529 socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE) = 3
+19:58:23.805576 bind(3, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 0
+19:58:23.805603 getsockname(3, {sa_family=AF_NETLINK, nl_pid=14497, nl_groups=00000000}, [12]) = 0
+19:58:23.805630 sendto(3, {{len=20, type=RTM_GETADDR, flags=NLM_F_REQUEST|NLM_F_DUMP, seq=1558526303, pid=0}, {ifa_family=AF_UNSPEC, ...}}, 20, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 20
+19:58:23.805750 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=76, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526303, pid=14497}, {ifa_family=AF_INET, ifa_prefixlen=8, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 127.0.0.1}, {{nla_len=8, nla_type=IFA_LOCAL}, 127.0.0.1}, {{nla_len=7, nla_type=IFA_LABEL}, "lo"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}]}, {{len=88, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526303, pid=14497}, {ifa_family=AF_INET, ifa_prefixlen=16, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_LOCAL}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_BROADCAST}, 10.162.255.255}, {{nla_len=11, nla_type=IFA_LABEL}, "wlp2s0"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_NOPREFIXROUTE}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=9773, ifa_valid=9773, cstamp=1131670, tstamp=1131957}}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 164
+19:58:23.805886 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526303, pid=14497}, {ifa_family=AF_INET6, ifa_prefixlen=128, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, ::1}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526303, pid=14497}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_SECONDARY, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3dcd:488a:f597:2c5c}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14397, ifa_valid=86397, cstamp=1131935, tstamp=1594133}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_SECONDARY}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526303, pid=14497}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3a6b:fb72:809:916b}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14397, ifa_valid=86397, cstamp=1131935, tstamp=1594133}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_MANAGETEMPADDR|IFA_F_NOPREFIXROUTE}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526303, pid=14497}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_LINK, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, fe80::a088:372b:b411:c6bd}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=1131667, tstamp=1594133}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT|IFA_F_NOPREFIXROUTE}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 288
+19:58:23.806008 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base={{len=20, type=NLMSG_DONE, flags=NLM_F_MULTI, seq=1558526303, pid=14497}, 0}, iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 20
+19:58:23.806050 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 4
+19:58:23.806101 connect(4, {sa_family=AF_UNIX, sun_path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+19:58:23.806139 close(4)                = 0
+19:58:23.806169 close(3)                = 0
+19:58:23.806198 openat(AT_FDCWD, "/etc/gai.conf", O_RDONLY|O_CLOEXEC) = 3
+19:58:23.806225 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+19:58:23.806248 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+19:58:23.806272 read(3, "# Configuration for getaddrinfo("..., 4096) = 2584
+19:58:23.806300 read(3, "", 4096)       = 0
+19:58:23.806321 close(3)                = 0
+19:58:23.806342 futex(0x7f0fd3585044, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+19:58:23.806365 socket(AF_INET6, SOCK_DGRAM|SOCK_CLOEXEC, IPPROTO_IP) = 3
+19:58:23.806388 connect(3, {sa_family=AF_INET6, sin6_port=htons(0), inet_pton(AF_INET6, "::", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, 28) = 0
+19:58:23.806416 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(36874), inet_pton(AF_INET6, "::1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+19:58:23.806441 connect(3, {sa_family=AF_UNSPEC, sa_data="\0\0\0\0\0\0\0\0\0\0\0\0\0\0"}, 16) = 0
+19:58:23.806465 connect(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+19:58:23.806500 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(52489), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+19:58:23.806534 close(3)                = 0
+19:58:23.806562 socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 3
+19:58:23.806586 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+19:58:23.806609 bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+19:58:23.806632 listen(3, 1024)         = 0
+19:58:23.806654 getsockname(3, {sa_family=AF_INET, sin_port=htons(43261), sin_addr=inet_addr("0.0.0.0")}, [16]) = 0
+19:58:23.806682 write(1, "43261\n", 6)  = 6
+19:58:23.806707 fstat(0, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+19:58:23.806730 read(0, "accept\n", 1024) = 7
+19:58:23.868404 accept(3, NULL, NULL)   = 4
+19:58:24.338427 fcntl(4, F_GETFL)       = 0x2 (flags O_RDWR)
+19:58:24.338547 read(0, "readline\n", 1024) = 9
+19:58:24.385967 fstat(4, {st_mode=S_IFSOCK|0777, st_size=0, ...}) = 0
+19:58:24.386370 read(4, 0x55e33f6b4400, 4096) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+strace: Process 14497 detached
+19:58:27.704918 execve("./server", ["./server"], 0x7ffd5c1a3f80 /* 57 vars */) = 0
+19:58:27.705964 brk(NULL)               = 0x557082957000
+19:58:27.706141 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:27.706276 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+19:58:27.706390 openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+19:58:27.706497 fstat(3, {st_mode=S_IFREG|0644, st_size=132087, ...}) = 0
+19:58:27.706599 mmap(NULL, 132087, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f77d40ef000
+19:58:27.706697 close(3)                = 0
+19:58:27.706797 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:27.706917 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3
+19:58:27.707024 read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0000b\0\0\0\0\0\0"..., 832) = 832
+19:58:27.707124 fstat(3, {st_mode=S_IFREG|0755, st_size=144976, ...}) = 0
+19:58:27.707220 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f77d40ed000
+19:58:27.707327 mmap(NULL, 2221184, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f77d3cca000
+19:58:27.707426 mprotect(0x7f77d3ce4000, 2093056, PROT_NONE) = 0
+19:58:27.707529 mmap(0x7f77d3ee3000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x19000) = 0x7f77d3ee3000
+19:58:27.707648 mmap(0x7f77d3ee5000, 13440, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f77d3ee5000
+19:58:27.707766 close(3)                = 0
+19:58:27.707872 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:27.708010 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+19:58:27.708118 read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\260\34\2\0\0\0\0\0"..., 832) = 832
+19:58:27.708217 fstat(3, {st_mode=S_IFREG|0755, st_size=2030544, ...}) = 0
+19:58:27.708314 mmap(NULL, 4131552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f77d38d9000
+19:58:27.708411 mprotect(0x7f77d3ac0000, 2097152, PROT_NONE) = 0
+19:58:27.708514 mmap(0x7f77d3cc0000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) = 0x7f77d3cc0000
+19:58:27.708631 mmap(0x7f77d3cc6000, 15072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f77d3cc6000
+19:58:27.708748 close(3)                = 0
+19:58:27.708880 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f77d40ea000
+19:58:27.708988 arch_prctl(ARCH_SET_FS, 0x7f77d40ea740) = 0
+19:58:27.709208 mprotect(0x7f77d3cc0000, 16384, PROT_READ) = 0
+19:58:27.709338 mprotect(0x7f77d3ee3000, 4096, PROT_READ) = 0
+19:58:27.709499 mprotect(0x55708201b000, 4096, PROT_READ) = 0
+19:58:27.709604 mprotect(0x7f77d4110000, 4096, PROT_READ) = 0
+19:58:27.709700 munmap(0x7f77d40ef000, 132087) = 0
+19:58:27.709836 set_tid_address(0x7f77d40eaa10) = 14520
+19:58:27.709923 set_robust_list(0x7f77d40eaa20, 24) = 0
+19:58:27.710021 rt_sigaction(SIGRTMIN, {sa_handler=0x7f77d3ccfcb0, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7f77d3cdc890}, NULL, 8) = 0
+19:58:27.710131 rt_sigaction(SIGRT_1, {sa_handler=0x7f77d3ccfd50, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7f77d3cdc890}, NULL, 8) = 0
+19:58:27.710232 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+19:58:27.710342 prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+19:58:27.710510 rt_sigaction(SIGUSR1, {sa_handler=0x557081e17366, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0x7f77d3cdc890}, NULL, 8) = 0
+19:58:27.710640 fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+19:58:27.710849 brk(NULL)               = 0x557082957000
+19:58:27.710939 brk(0x557082978000)     = 0x557082978000
+19:58:27.711040 write(1, "ready\n", 6)  = 6
+19:58:27.711291 socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE) = 3
+19:58:27.711434 bind(3, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 0
+19:58:27.711582 getsockname(3, {sa_family=AF_NETLINK, nl_pid=14520, nl_groups=00000000}, [12]) = 0
+19:58:27.711743 sendto(3, {{len=20, type=RTM_GETADDR, flags=NLM_F_REQUEST|NLM_F_DUMP, seq=1558526307, pid=0}, {ifa_family=AF_UNSPEC, ...}}, 20, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 20
+19:58:27.712453 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=76, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526307, pid=14520}, {ifa_family=AF_INET, ifa_prefixlen=8, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 127.0.0.1}, {{nla_len=8, nla_type=IFA_LOCAL}, 127.0.0.1}, {{nla_len=7, nla_type=IFA_LABEL}, "lo"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}]}, {{len=88, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526307, pid=14520}, {ifa_family=AF_INET, ifa_prefixlen=16, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_LOCAL}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_BROADCAST}, 10.162.255.255}, {{nla_len=11, nla_type=IFA_LABEL}, "wlp2s0"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_NOPREFIXROUTE}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=9769, ifa_valid=9769, cstamp=1131670, tstamp=1131957}}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 164
+19:58:27.713181 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526307, pid=14520}, {ifa_family=AF_INET6, ifa_prefixlen=128, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, ::1}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526307, pid=14520}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_SECONDARY, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3dcd:488a:f597:2c5c}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14400, ifa_valid=86400, cstamp=1131935, tstamp=1594748}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_SECONDARY}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526307, pid=14520}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3a6b:fb72:809:916b}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14400, ifa_valid=86400, cstamp=1131935, tstamp=1594748}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_MANAGETEMPADDR|IFA_F_NOPREFIXROUTE}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526307, pid=14520}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_LINK, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, fe80::a088:372b:b411:c6bd}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=1131667, tstamp=1594748}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT|IFA_F_NOPREFIXROUTE}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 288
+19:58:27.713874 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base={{len=20, type=NLMSG_DONE, flags=NLM_F_MULTI, seq=1558526307, pid=14520}, 0}, iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 20
+19:58:27.714301 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 4
+19:58:27.714521 connect(4, {sa_family=AF_UNIX, sun_path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+19:58:27.714748 close(4)                = 0
+19:58:27.714883 close(3)                = 0
+19:58:27.714984 openat(AT_FDCWD, "/etc/gai.conf", O_RDONLY|O_CLOEXEC) = 3
+19:58:27.715123 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+19:58:27.715226 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+19:58:27.715356 read(3, "# Configuration for getaddrinfo("..., 4096) = 2584
+19:58:27.715490 read(3, "", 4096)       = 0
+19:58:27.715602 close(3)                = 0
+19:58:27.715723 futex(0x7f77d3cc7044, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+19:58:27.715848 socket(AF_INET6, SOCK_DGRAM|SOCK_CLOEXEC, IPPROTO_IP) = 3
+19:58:27.716015 connect(3, {sa_family=AF_INET6, sin6_port=htons(0), inet_pton(AF_INET6, "::", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, 28) = 0
+19:58:27.716182 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(42972), inet_pton(AF_INET6, "::1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+19:58:27.716342 connect(3, {sa_family=AF_UNSPEC, sa_data="\0\0\0\0\0\0\0\0\0\0\0\0\0\0"}, 16) = 0
+19:58:27.716486 connect(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+19:58:27.716649 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(51900), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+19:58:27.716892 close(3)                = 0
+19:58:27.717076 socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 3
+19:58:27.717267 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+19:58:27.717420 bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+19:58:27.717602 listen(3, 1024)         = 0
+19:58:27.717836 getsockname(3, {sa_family=AF_INET, sin_port=htons(45063), sin_addr=inet_addr("0.0.0.0")}, [16]) = 0
+19:58:27.718109 write(1, "45063\n", 6)  = 6
+19:58:27.718330 fstat(0, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+19:58:27.718513 read(0, "accept\n", 1024) = 7
+19:58:27.799213 accept(3, NULL, NULL)   = 4
+19:58:28.271322 fcntl(4, F_GETFL)       = 0x2 (flags O_RDWR)
+19:58:28.271449 read(0, "readline\n", 1024) = 9
+19:58:28.318296 fstat(4, {st_mode=S_IFSOCK|0777, st_size=0, ...}) = 0
+19:58:28.318727 read(4, strace: Process 14520 detached
+ <detached ...>
+19:58:31.637865 execve("./server", ["./server"], 0x7fff9912e6f0 /* 57 vars */) = 0
+19:58:31.639121 brk(NULL)               = 0x55d524f6e000
+19:58:31.639389 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:31.639688 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+19:58:31.639824 openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+19:58:31.639961 fstat(3, {st_mode=S_IFREG|0644, st_size=132087, ...}) = 0
+19:58:31.640091 mmap(NULL, 132087, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f8e1eb5a000
+19:58:31.640190 close(3)                = 0
+19:58:31.640287 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:31.640401 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3
+19:58:31.640500 read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0000b\0\0\0\0\0\0"..., 832) = 832
+19:58:31.640597 fstat(3, {st_mode=S_IFREG|0755, st_size=144976, ...}) = 0
+19:58:31.640686 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f8e1eb58000
+19:58:31.640785 mmap(NULL, 2221184, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f8e1e735000
+19:58:31.640876 mprotect(0x7f8e1e74f000, 2093056, PROT_NONE) = 0
+19:58:31.640974 mmap(0x7f8e1e94e000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x19000) = 0x7f8e1e94e000
+19:58:31.641086 mmap(0x7f8e1e950000, 13440, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f8e1e950000
+19:58:31.641190 close(3)                = 0
+19:58:31.641285 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+19:58:31.641383 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+19:58:31.641480 read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\260\34\2\0\0\0\0\0"..., 832) = 832
+19:58:31.641573 fstat(3, {st_mode=S_IFREG|0755, st_size=2030544, ...}) = 0
+19:58:31.641666 mmap(NULL, 4131552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f8e1e344000
+19:58:31.641757 mprotect(0x7f8e1e52b000, 2097152, PROT_NONE) = 0
+19:58:31.641853 mmap(0x7f8e1e72b000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) = 0x7f8e1e72b000
+19:58:31.641974 mmap(0x7f8e1e731000, 15072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f8e1e731000
+19:58:31.642079 close(3)                = 0
+19:58:31.642218 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f8e1eb55000
+19:58:31.642316 arch_prctl(ARCH_SET_FS, 0x7f8e1eb55740) = 0
+19:58:31.642530 mprotect(0x7f8e1e72b000, 16384, PROT_READ) = 0
+19:58:31.642648 mprotect(0x7f8e1e94e000, 4096, PROT_READ) = 0
+19:58:31.642797 mprotect(0x55d522f46000, 4096, PROT_READ) = 0
+19:58:31.642892 mprotect(0x7f8e1eb7b000, 4096, PROT_READ) = 0
+19:58:31.642981 munmap(0x7f8e1eb5a000, 132087) = 0
+19:58:31.643109 set_tid_address(0x7f8e1eb55a10) = 14541
+19:58:31.643191 set_robust_list(0x7f8e1eb55a20, 24) = 0
+19:58:31.643285 rt_sigaction(SIGRTMIN, {sa_handler=0x7f8e1e73acb0, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7f8e1e747890}, NULL, 8) = 0
+19:58:31.643389 rt_sigaction(SIGRT_1, {sa_handler=0x7f8e1e73ad50, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7f8e1e747890}, NULL, 8) = 0
+19:58:31.643504 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+19:58:31.643663 prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+19:58:31.643873 rt_sigaction(SIGUSR1, {sa_handler=0x55d522d42366, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0x7f8e1e747890}, NULL, 8) = 0
+19:58:31.644088 fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+19:58:31.644320 brk(NULL)               = 0x55d524f6e000
+19:58:31.644414 brk(0x55d524f8f000)     = 0x55d524f8f000
+19:58:31.644515 write(1, "ready\n", 6)  = 6
+19:58:31.644709 socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE) = 3
+19:58:31.644859 bind(3, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 0
+19:58:31.644980 getsockname(3, {sa_family=AF_NETLINK, nl_pid=14541, nl_groups=00000000}, [12]) = 0
+19:58:31.645341 sendto(3, {{len=20, type=RTM_GETADDR, flags=NLM_F_REQUEST|NLM_F_DUMP, seq=1558526311, pid=0}, {ifa_family=AF_UNSPEC, ...}}, 20, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 20
+19:58:31.646065 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=76, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526311, pid=14541}, {ifa_family=AF_INET, ifa_prefixlen=8, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 127.0.0.1}, {{nla_len=8, nla_type=IFA_LOCAL}, 127.0.0.1}, {{nla_len=7, nla_type=IFA_LABEL}, "lo"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}]}, {{len=88, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526311, pid=14541}, {ifa_family=AF_INET, ifa_prefixlen=16, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_LOCAL}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_BROADCAST}, 10.162.255.255}, {{nla_len=11, nla_type=IFA_LABEL}, "wlp2s0"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_NOPREFIXROUTE}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=9765, ifa_valid=9765, cstamp=1131670, tstamp=1131957}}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 164
+19:58:31.646781 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526311, pid=14541}, {ifa_family=AF_INET6, ifa_prefixlen=128, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, ::1}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526311, pid=14541}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_SECONDARY, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3dcd:488a:f597:2c5c}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14399, ifa_valid=86399, cstamp=1131935, tstamp=1595055}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_SECONDARY}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526311, pid=14541}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3a6b:fb72:809:916b}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14399, ifa_valid=86399, cstamp=1131935, tstamp=1595055}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_MANAGETEMPADDR|IFA_F_NOPREFIXROUTE}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526311, pid=14541}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_LINK, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, fe80::a088:372b:b411:c6bd}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=1131667, tstamp=1595055}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT|IFA_F_NOPREFIXROUTE}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 288
+19:58:31.647452 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base={{len=20, type=NLMSG_DONE, flags=NLM_F_MULTI, seq=1558526311, pid=14541}, 0}, iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 20
+19:58:31.647732 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 4
+19:58:31.647893 connect(4, {sa_family=AF_UNIX, sun_path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+19:58:31.648092 close(4)                = 0
+19:58:31.648198 close(3)                = 0
+19:58:31.648296 openat(AT_FDCWD, "/etc/gai.conf", O_RDONLY|O_CLOEXEC) = 3
+19:58:31.648408 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+19:58:31.648518 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+19:58:31.648621 read(3, "# Configuration for getaddrinfo("..., 4096) = 2584
+19:58:31.648747 read(3, "", 4096)       = 0
+19:58:31.648838 close(3)                = 0
+19:58:31.648926 futex(0x7f8e1e732044, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+19:58:31.649014 socket(AF_INET6, SOCK_DGRAM|SOCK_CLOEXEC, IPPROTO_IP) = 3
+19:58:31.649110 connect(3, {sa_family=AF_INET6, sin6_port=htons(0), inet_pton(AF_INET6, "::", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, 28) = 0
+19:58:31.649223 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(44996), inet_pton(AF_INET6, "::1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+19:58:31.649328 connect(3, {sa_family=AF_UNSPEC, sa_data="\0\0\0\0\0\0\0\0\0\0\0\0\0\0"}, 16) = 0
+19:58:31.649420 connect(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+19:58:31.649534 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(40563), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+19:58:31.649674 close(3)                = 0
+19:58:31.649801 socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 3
+19:58:31.649912 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+19:58:31.650075 bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+19:58:31.650218 listen(3, 1024)         = 0
+19:58:31.650344 getsockname(3, {sa_family=AF_INET, sin_port=htons(37169), sin_addr=inet_addr("0.0.0.0")}, [16]) = 0
+19:58:31.650486 write(1, "37169\n", 6)  = 6
+19:58:31.650608 fstat(0, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+19:58:31.650714 read(0, "accept\n", 1024) = 7
+19:58:31.730352 accept(3, NULL, NULLstrace: Process 14541 detached
+ <detached ...>
+20:00:29.974940 execve("./server", ["./server"], 0x7ffcc1f00280 /* 57 vars */) = 0
+20:00:29.975273 brk(NULL)               = 0x55d388f1d000
+20:00:29.975308 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+20:00:29.975340 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+20:00:29.975370 openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+20:00:29.975394 fstat(3, {st_mode=S_IFREG|0644, st_size=132087, ...}) = 0
+20:00:29.975417 mmap(NULL, 132087, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7fa2aa95f000
+20:00:29.975438 close(3)                = 0
+20:00:29.975458 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+20:00:29.975484 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3
+20:00:29.975507 read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0000b\0\0\0\0\0\0"..., 832) = 832
+20:00:29.975528 fstat(3, {st_mode=S_IFREG|0755, st_size=144976, ...}) = 0
+20:00:29.975549 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fa2aa95d000
+20:00:29.975572 mmap(NULL, 2221184, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7fa2aa53a000
+20:00:29.975594 mprotect(0x7fa2aa554000, 2093056, PROT_NONE) = 0
+20:00:29.975616 mmap(0x7fa2aa753000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x19000) = 0x7fa2aa753000
+20:00:29.975642 mmap(0x7fa2aa755000, 13440, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7fa2aa755000
+20:00:29.975667 close(3)                = 0
+20:00:29.975688 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+20:00:29.975712 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+20:00:29.975734 read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\260\34\2\0\0\0\0\0"..., 832) = 832
+20:00:29.975755 fstat(3, {st_mode=S_IFREG|0755, st_size=2030544, ...}) = 0
+20:00:29.975776 mmap(NULL, 4131552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7fa2aa149000
+20:00:29.975797 mprotect(0x7fa2aa330000, 2097152, PROT_NONE) = 0
+20:00:29.975819 mmap(0x7fa2aa530000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) = 0x7fa2aa530000
+20:00:29.975843 mmap(0x7fa2aa536000, 15072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7fa2aa536000
+20:00:29.975868 close(3)                = 0
+20:00:29.975896 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7fa2aa95a000
+20:00:29.975919 arch_prctl(ARCH_SET_FS, 0x7fa2aa95a740) = 0
+20:00:29.976001 mprotect(0x7fa2aa530000, 16384, PROT_READ) = 0
+20:00:29.976054 mprotect(0x7fa2aa753000, 4096, PROT_READ) = 0
+20:00:29.976089 mprotect(0x55d388be6000, 4096, PROT_READ) = 0
+20:00:29.976112 mprotect(0x7fa2aa980000, 4096, PROT_READ) = 0
+20:00:29.976132 munmap(0x7fa2aa95f000, 132087) = 0
+20:00:29.976161 set_tid_address(0x7fa2aa95aa10) = 14608
+20:00:29.976180 set_robust_list(0x7fa2aa95aa20, 24) = 0
+20:00:29.976201 rt_sigaction(SIGRTMIN, {sa_handler=0x7fa2aa53fcb0, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7fa2aa54c890}, NULL, 8) = 0
+20:00:29.976225 rt_sigaction(SIGRT_1, {sa_handler=0x7fa2aa53fd50, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7fa2aa54c890}, NULL, 8) = 0
+20:00:29.976246 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+20:00:29.976269 prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+20:00:29.976304 rt_sigaction(SIGUSR1, {sa_handler=0x55d3889e2366, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0x7fa2aa54c890}, NULL, 8) = 0
+20:00:29.976332 fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+20:00:29.976376 brk(NULL)               = 0x55d388f1d000
+20:00:29.976395 brk(0x55d388f3e000)     = 0x55d388f3e000
+20:00:29.976417 write(1, "ready\n", 6)  = 6
+20:00:29.976497 socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE) = 3
+20:00:29.976534 bind(3, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 0
+20:00:29.976563 getsockname(3, {sa_family=AF_NETLINK, nl_pid=14608, nl_groups=00000000}, [12]) = 0
+20:00:29.976592 sendto(3, {{len=20, type=RTM_GETADDR, flags=NLM_F_REQUEST|NLM_F_DUMP, seq=1558526429, pid=0}, {ifa_family=AF_UNSPEC, ...}}, 20, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 20
+20:00:29.976721 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=76, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526429, pid=14608}, {ifa_family=AF_INET, ifa_prefixlen=8, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 127.0.0.1}, {{nla_len=8, nla_type=IFA_LOCAL}, 127.0.0.1}, {{nla_len=7, nla_type=IFA_LABEL}, "lo"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}]}, {{len=88, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526429, pid=14608}, {ifa_family=AF_INET, ifa_prefixlen=16, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_LOCAL}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_BROADCAST}, 10.162.255.255}, {{nla_len=11, nla_type=IFA_LABEL}, "wlp2s0"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_NOPREFIXROUTE}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=9647, ifa_valid=9647, cstamp=1131670, tstamp=1131957}}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 164
+20:00:29.976870 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526429, pid=14608}, {ifa_family=AF_INET6, ifa_prefixlen=128, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, ::1}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526429, pid=14608}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_SECONDARY, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3dcd:488a:f597:2c5c}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14400, ifa_valid=86400, cstamp=1131935, tstamp=1607046}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_SECONDARY}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526429, pid=14608}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3a6b:fb72:809:916b}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14400, ifa_valid=86400, cstamp=1131935, tstamp=1607046}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_MANAGETEMPADDR|IFA_F_NOPREFIXROUTE}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526429, pid=14608}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_LINK, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, fe80::a088:372b:b411:c6bd}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=1131667, tstamp=1607046}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT|IFA_F_NOPREFIXROUTE}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 288
+20:00:29.977054 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base={{len=20, type=NLMSG_DONE, flags=NLM_F_MULTI, seq=1558526429, pid=14608}, 0}, iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 20
+20:00:29.977107 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 4
+20:00:29.977153 connect(4, {sa_family=AF_UNIX, sun_path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+20:00:29.977216 close(4)                = 0
+20:00:29.977245 close(3)                = 0
+20:00:29.977276 openat(AT_FDCWD, "/etc/gai.conf", O_RDONLY|O_CLOEXEC) = 3
+20:00:29.977309 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+20:00:29.977335 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+20:00:29.977359 read(3, "# Configuration for getaddrinfo("..., 4096) = 2584
+20:00:29.977387 read(3, "", 4096)       = 0
+20:00:29.977411 close(3)                = 0
+20:00:29.977432 futex(0x7fa2aa537044, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+20:00:29.977454 socket(AF_INET6, SOCK_DGRAM|SOCK_CLOEXEC, IPPROTO_IP) = 3
+20:00:29.977476 connect(3, {sa_family=AF_INET6, sin6_port=htons(0), inet_pton(AF_INET6, "::", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, 28) = 0
+20:00:29.977506 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(49386), inet_pton(AF_INET6, "::1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+20:00:29.977531 connect(3, {sa_family=AF_UNSPEC, sa_data="\0\0\0\0\0\0\0\0\0\0\0\0\0\0"}, 16) = 0
+20:00:29.977552 connect(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+20:00:29.977578 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(49099), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+20:00:29.977603 close(3)                = 0
+20:00:29.977626 socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 3
+20:00:29.977648 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+20:00:29.977671 bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+20:00:29.977703 listen(3, 1024)         = 0
+20:00:29.977744 getsockname(3, {sa_family=AF_INET, sin_port=htons(42729), sin_addr=inet_addr("0.0.0.0")}, [16]) = 0
+20:00:29.977796 write(1, "42729\n", 6)  = 6
+20:00:29.977842 fstat(0, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+20:00:29.977880 read(0, "accept\n", 1024) = 7
+20:00:30.039490 accept(3, NULL, NULL)   = 4
+20:00:30.519067 fcntl(4, F_GETFL)       = 0x2 (flags O_RDWR)
+20:00:30.519296 read(0, "readline\n", 1024) = 9
+20:00:30.564398 fstat(4, {st_mode=S_IFSOCK|0777, st_size=0, ...}) = 0
+20:00:30.564652 read(4, 0x55d388f1e400, 4096) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+strace: Process 14608 detached
+20:00:33.885086 execve("./server", ["./server"], 0x7fff84ef6a90 /* 57 vars */) = 0
+20:00:33.886121 brk(NULL)               = 0x557f4004f000
+20:00:33.886286 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+20:00:33.886425 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+20:00:33.886533 openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+20:00:33.886638 fstat(3, {st_mode=S_IFREG|0644, st_size=132087, ...}) = 0
+20:00:33.886749 mmap(NULL, 132087, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f6b30ee2000
+20:00:33.886849 close(3)                = 0
+20:00:33.886946 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+20:00:33.887058 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3
+20:00:33.887162 read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0000b\0\0\0\0\0\0"..., 832) = 832
+20:00:33.887267 fstat(3, {st_mode=S_IFREG|0755, st_size=144976, ...}) = 0
+20:00:33.887361 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f6b30ee0000
+20:00:33.887467 mmap(NULL, 2221184, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f6b30abd000
+20:00:33.887565 mprotect(0x7f6b30ad7000, 2093056, PROT_NONE) = 0
+20:00:33.887665 mmap(0x7f6b30cd6000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x19000) = 0x7f6b30cd6000
+20:00:33.887784 mmap(0x7f6b30cd8000, 13440, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f6b30cd8000
+20:00:33.887902 close(3)                = 0
+20:00:33.888034 access("/etc/ld.so.nohwcap", F_OK) = -1 ENOENT (No such file or directory)
+20:00:33.888142 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+20:00:33.888247 read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\260\34\2\0\0\0\0\0"..., 832) = 832
+20:00:33.888345 fstat(3, {st_mode=S_IFREG|0755, st_size=2030544, ...}) = 0
+20:00:33.888441 mmap(NULL, 4131552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f6b306cc000
+20:00:33.888539 mprotect(0x7f6b308b3000, 2097152, PROT_NONE) = 0
+20:00:33.888639 mmap(0x7f6b30ab3000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1e7000) = 0x7f6b30ab3000
+20:00:33.888772 mmap(0x7f6b30ab9000, 15072, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f6b30ab9000
+20:00:33.888890 close(3)                = 0
+20:00:33.889024 mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f6b30edd000
+20:00:33.889132 arch_prctl(ARCH_SET_FS, 0x7f6b30edd740) = 0
+20:00:33.889364 mprotect(0x7f6b30ab3000, 16384, PROT_READ) = 0
+20:00:33.889480 mprotect(0x7f6b30cd6000, 4096, PROT_READ) = 0
+20:00:33.889638 mprotect(0x557f3eb1e000, 4096, PROT_READ) = 0
+20:00:33.889741 mprotect(0x7f6b30f03000, 4096, PROT_READ) = 0
+20:00:33.889836 munmap(0x7f6b30ee2000, 132087) = 0
+20:00:33.889968 set_tid_address(0x7f6b30edda10) = 14630
+20:00:33.890052 set_robust_list(0x7f6b30edda20, 24) = 0
+20:00:33.890149 rt_sigaction(SIGRTMIN, {sa_handler=0x7f6b30ac2cb0, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7f6b30acf890}, NULL, 8) = 0
+20:00:33.890260 rt_sigaction(SIGRT_1, {sa_handler=0x7f6b30ac2d50, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7f6b30acf890}, NULL, 8) = 0
+20:00:33.890357 rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+20:00:33.890462 prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+20:00:33.890627 rt_sigaction(SIGUSR1, {sa_handler=0x557f3e91a366, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0x7f6b30acf890}, NULL, 8) = 0
+20:00:33.890764 fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+20:00:33.890957 brk(NULL)               = 0x557f4004f000
+20:00:33.891045 brk(0x557f40070000)     = 0x557f40070000
+20:00:33.891146 write(1, "ready\n", 6)  = 6
+20:00:33.891383 socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE) = 3
+20:00:33.891531 bind(3, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 0
+20:00:33.891653 getsockname(3, {sa_family=AF_NETLINK, nl_pid=14630, nl_groups=00000000}, [12]) = 0
+20:00:33.891801 sendto(3, {{len=20, type=RTM_GETADDR, flags=NLM_F_REQUEST|NLM_F_DUMP, seq=1558526433, pid=0}, {ifa_family=AF_UNSPEC, ...}}, 20, 0, {sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, 12) = 20
+20:00:33.892333 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=76, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526433, pid=14630}, {ifa_family=AF_INET, ifa_prefixlen=8, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 127.0.0.1}, {{nla_len=8, nla_type=IFA_LOCAL}, 127.0.0.1}, {{nla_len=7, nla_type=IFA_LABEL}, "lo"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}]}, {{len=88, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526433, pid=14630}, {ifa_family=AF_INET, ifa_prefixlen=16, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=8, nla_type=IFA_ADDRESS}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_LOCAL}, 10.162.18.235}, {{nla_len=8, nla_type=IFA_BROADCAST}, 10.162.255.255}, {{nla_len=11, nla_type=IFA_LABEL}, "wlp2s0"}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_NOPREFIXROUTE}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=9643, ifa_valid=9643, cstamp=1131670, tstamp=1131957}}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 164
+20:00:33.892857 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base=[{{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526433, pid=14630}, {ifa_family=AF_INET6, ifa_prefixlen=128, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_HOST, ifa_index=if_nametoindex("lo")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, ::1}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=577, tstamp=577}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526433, pid=14630}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_SECONDARY, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3dcd:488a:f597:2c5c}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14400, ifa_valid=86400, cstamp=1131935, tstamp=1607364}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_SECONDARY}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526433, pid=14630}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=0, ifa_scope=RT_SCOPE_UNIVERSE, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, 2403:d400:1001:2:3a6b:fb72:809:916b}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=14400, ifa_valid=86400, cstamp=1131935, tstamp=1607364}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_MANAGETEMPADDR|IFA_F_NOPREFIXROUTE}]}, {{len=72, type=RTM_NEWADDR, flags=NLM_F_MULTI, seq=1558526433, pid=14630}, {ifa_family=AF_INET6, ifa_prefixlen=64, ifa_flags=IFA_F_PERMANENT, ifa_scope=RT_SCOPE_LINK, ifa_index=if_nametoindex("wlp2s0")}, [{{nla_len=20, nla_type=IFA_ADDRESS}, fe80::a088:372b:b411:c6bd}, {{nla_len=20, nla_type=IFA_CACHEINFO}, {ifa_prefered=4294967295, ifa_valid=4294967295, cstamp=1131667, tstamp=1607364}}, {{nla_len=8, nla_type=IFA_FLAGS}, IFA_F_PERMANENT|IFA_F_NOPREFIXROUTE}]}], iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 288
+20:00:33.893278 recvmsg(3, {msg_name={sa_family=AF_NETLINK, nl_pid=0, nl_groups=00000000}, msg_namelen=12, msg_iov=[{iov_base={{len=20, type=NLMSG_DONE, flags=NLM_F_MULTI, seq=1558526433, pid=14630}, 0}, iov_len=4096}], msg_iovlen=1, msg_controllen=0, msg_flags=0}, 0) = 20
+20:00:33.893440 socket(AF_UNIX, SOCK_STREAM|SOCK_CLOEXEC|SOCK_NONBLOCK, 0) = 4
+20:00:33.893537 connect(4, {sa_family=AF_UNIX, sun_path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+20:00:33.893651 close(4)                = 0
+20:00:33.893742 close(3)                = 0
+20:00:33.893835 openat(AT_FDCWD, "/etc/gai.conf", O_RDONLY|O_CLOEXEC) = 3
+20:00:33.893939 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+20:00:33.894046 fstat(3, {st_mode=S_IFREG|0644, st_size=2584, ...}) = 0
+20:00:33.894194 read(3, "# Configuration for getaddrinfo("..., 4096) = 2584
+20:00:33.894371 read(3, "", 4096)       = 0
+20:00:33.894494 close(3)                = 0
+20:00:33.894585 futex(0x7f6b30aba044, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+20:00:33.894671 socket(AF_INET6, SOCK_DGRAM|SOCK_CLOEXEC, IPPROTO_IP) = 3
+20:00:33.894763 connect(3, {sa_family=AF_INET6, sin6_port=htons(0), inet_pton(AF_INET6, "::", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, 28) = 0
+20:00:33.894875 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(50182), inet_pton(AF_INET6, "::1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+20:00:33.894978 connect(3, {sa_family=AF_UNSPEC, sa_data="\0\0\0\0\0\0\0\0\0\0\0\0\0\0"}, 16) = 0
+20:00:33.895070 connect(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+20:00:33.895172 getsockname(3, {sa_family=AF_INET6, sin6_port=htons(55295), inet_pton(AF_INET6, "::ffff:127.0.0.1", &sin6_addr), sin6_flowinfo=htonl(0), sin6_scope_id=0}, [28]) = 0
+20:00:33.895290 close(3)                = 0
+20:00:33.895386 socket(AF_INET, SOCK_STREAM, IPPROTO_TCP) = 3
+20:00:33.895474 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
+20:00:33.895566 bind(3, {sa_family=AF_INET, sin_port=htons(0), sin_addr=inet_addr("0.0.0.0")}, 16) = 0
+20:00:33.895661 listen(3, 1024)         = 0
+20:00:33.895746 getsockname(3, {sa_family=AF_INET, sin_port=htons(40195), sin_addr=inet_addr("0.0.0.0")}, [16]) = 0
+20:00:33.895862 write(1, "40195\n", 6)  = 6
+20:00:33.896001 fstat(0, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 3), ...}) = 0
+20:00:33.896105 read(0, "accept\n", 1024) = 7
+20:00:33.978998 accept(3, NULL, NULLstrace: Process 14630 detached
+ <detached ...>
