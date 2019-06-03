@@ -51,13 +51,14 @@ ssize_t Rio_readlineb_w(rio_t *rp, void *usrbuf, size_t maxlen)
     return size;
 }
 
-void Rio_writen_w(int fd, void *usrbuf, size_t n)
+ssize_t Rio_writen_w(int fd, void *usrbuf, size_t n)
 {
-    if (rio_writen(fd, usrbuf, n) != n)
+    ssize_t size;
+    if ((size = rio_writen(fd, usrbuf, n)) != n)
     {
         fprintf(stderr, "Rio_writen error");
-        return;
     }
+    return size;
 }
 
 sem_t mutex;
@@ -138,7 +139,7 @@ void doit(int clientfd,char *url_log,size_t *size)
         return;
     }
 
-    if (strlen(buf) < 2 || buf[strlen(buf)-1]!='\n'||buf[strlen(buf)-2]!='\r') {
+    if (buf[strlen(buf)-1]!='\n' && buf[strlen(buf)-2]!='\r') {
         Close(clientfd);
         return;
     }
@@ -159,10 +160,10 @@ void doit(int clientfd,char *url_log,size_t *size)
         Close(clientfd);
         return;
     }
-    memset(buf, 0, MAXLINE);
+    memset(buf, 0, sizeof(buf));
 
     /* Connnect with end server and send request */
-    if ((serverfd = Open_clientfd(hostname, port)) < 0) {
+    if ((serverfd = Open_clientfd(hostname, port)) <= 0) {
         Close(clientfd);
         return;
     }
@@ -178,7 +179,12 @@ void doit(int clientfd,char *url_log,size_t *size)
 
     /* Send request header */
     while((n = Rio_readlineb_w(&client_rio, buf, MAXLINE)) > 0) {
-        Rio_writen_w(serverfd, buf, strlen(buf));
+        ssize_t m = Rio_writen_w(serverfd, buf, strlen(buf));
+        if (m != strlen(buf)) {
+            Close(clientfd);
+            Close(serverfd);
+            return;
+        }
         if(!strncasecmp(buf, "Content-Length", 14)) {
             req_size = atoi(buf + 15);
         }
@@ -187,24 +193,27 @@ void doit(int clientfd,char *url_log,size_t *size)
         }
     }
 
-    /* Send request body */
-    if (strcmp("GET", method)) {
-        if (req_size > 0) {
-            for (int i = 0; i < req_size; i++) {
-                /* Deal with read error as encountering EOF */
-                if ((n = Rio_readnb_w(&client_rio, buf, 1)) == 0) {
-                    break;
-                }
+    if (n <= 0) {
+        Close(clientfd);
+        Close(serverfd);
+        return;
+    }
 
-                Rio_writen_w(serverfd, buf, 1);
-                //  printf("writen request body: %s %d TO %d",buf,i,serverfd);
+    /* Send request body */
+    memset(buf, 0, sizeof(buf));
+    if (req_size > 0) {
+        for (int i = 0; i < req_size; i++) {
+            /* Deal with read error as encountering EOF */
+            if ((n = Rio_readnb_w(&client_rio, buf, 1)) <= 0) {
+                Close(clientfd);
+                Close(serverfd);
+                return;
             }
-        }else{
-            while ((n = Rio_readlineb_w(&client_rio, buf, MAXLINE)) > 0) {
-                Rio_writen_w(serverfd, buf, n);
-                if(!strcmp(buf, "0\r\n")) {
-                    break;
-                }
+            ssize_t m = Rio_writen_w(serverfd, buf, 1);
+            if (m != 1) {
+                Close(clientfd);
+                Close(serverfd);
+                return;
             }
         }
     }
@@ -223,21 +232,26 @@ void doit(int clientfd,char *url_log,size_t *size)
         }
     }
 
+    if (n <= 0) {
+        Close(clientfd);
+        Close(serverfd);
+        return;
+    }
+
     /* Send response body */
     if (resp_size > 0) {
+        resp_total_size += resp_size;
         for (int i = 0; i < resp_size; i++) {
             if ((n = Rio_readnb_w(&server_rio, buf, 1)) == 0) {
-                break;
+                Close(clientfd);
+                Close(serverfd);
+                return;
             }
-            resp_total_size++;
-            Rio_writen_w(clientfd, buf, 1);
-        }
-    }else{
-        while ((n = Rio_readlineb_w(&server_rio, buf, MAXLINE)) > 0) {
-            Rio_writen_w(clientfd, buf, n);
-            resp_total_size++;
-            if(!strcmp(buf, "0\r\n")) {
-                break;
+            ssize_t m = Rio_writen_w(clientfd, buf, 1);
+            if (m <= 0) {
+                Close(clientfd);
+                Close(serverfd);
+                return;
             }
         }
     }
@@ -245,6 +259,7 @@ void doit(int clientfd,char *url_log,size_t *size)
 
     Close(serverfd);
     Close(clientfd);
+    return;
 }
 
 
