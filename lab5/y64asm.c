@@ -212,12 +212,19 @@ typedef enum { PARSE_ERR=-1, PARSE_REG, PARSE_DIGIT, PARSE_SYMBOL,
 parse_t parse_instr(char **ptr, instr_t **inst)
 {
     /* skip the blank */
+    SKIP_BLANK(*ptr);
 
     /* find_instr and check end */
+    char tempinstr[MAX_INSLEN] = "";
+    sscanf(*ptr, "%s", tempinstr);
+    *inst = find_instr(tempinstr);
+    if (*inst == NULL) {
+      return PARSE_ERR;
+    }
 
     /* set 'ptr' and 'inst' */
-
-    return PARSE_ERR;
+    *ptr = *ptr + (*inst)->bytes;
+    return PARSE_INSTR;
 }
 
 /*
@@ -232,10 +239,14 @@ parse_t parse_instr(char **ptr, instr_t **inst)
 parse_t parse_delim(char **ptr, char delim)
 {
     /* skip the blank and check */
+    SKIP_BLANK(*ptr);
+    if (**ptr != delim) {
+      return PARSE_ERR;
+    }
 
     /* set 'ptr' */
-
-    return PARSE_ERR;
+    *ptr = *ptr + 1;
+    return PARSE_DELIM;
 }
 
 /*
@@ -252,12 +263,26 @@ parse_t parse_delim(char **ptr, char delim)
 parse_t parse_reg(char **ptr, regid_t *regid)
 {
     /* skip the blank and check */
+    SKIP_BLANK(*ptr);
+    if (!IS_REG(*ptr)) {
+      return PARSE_ERR;
+    }
 
     /* find register */
+    char tempinstr[MAX_INSLEN] = "";
+    int pos = 1;
+    while (IS_LETTER(*ptr+p) || IS_DIGIT(*ptr+p)) {
+      p = p + 1;
+    }
+    strncpy(tempinstr, *ptr, p);
+    *regid = find_register(tempinstr);
+    if (*regid == NULL) {
+      return PARSE_ERR;
+    }
 
     /* set 'ptr' and 'regid' */
-
-    return PARSE_ERR;
+    *ptr = *ptr + p;
+    return PARSE_REG;
 }
 
 /*
@@ -274,12 +299,22 @@ parse_t parse_reg(char **ptr, regid_t *regid)
 parse_t parse_symbol(char **ptr, char **name)
 {
     /* skip the blank and check */
+    SKIP_BLANK(*ptr);
+    if (!IS_LETTER(*ptr)) {
+      return PARSE_ERR;
+    }
 
     /* allocate name and copy to it */
+    **name = (char *)malloc(MAX_INSLEN);
+    int pos = 0;
+    while (IS_LETTER(*ptr+p) || IS_DIGIT(*ptr+p)) {
+      *(*name + p) = *(*ptr + p);
+      p = p + 1;
+    }
 
     /* set 'ptr' and 'name' */
-
-    return PARSE_ERR;
+    *ptr = *ptr + p;
+    return PARSE_SYMBOL;
 }
 
 /*
@@ -296,13 +331,18 @@ parse_t parse_symbol(char **ptr, char **name)
 parse_t parse_digit(char **ptr, long *value)
 {
     /* skip the blank and check */
+    SKIP_BLANK(*ptr);
+    if (!IS_DIGIT(*ptr)) {
+      return PARSE_ERR;
+    }
 
     /* calculate the digit, (NOTE: see strtoll()) */
+    char *endptr;
+    *value = strtoul(*ptr, &endptr, 0);
 
     /* set 'ptr' and 'value' */
-
-    return PARSE_ERR;
-
+    *ptr = endptr;
+    return PARSE_DIGIT;
 }
 
 /*
@@ -324,13 +364,30 @@ parse_t parse_digit(char **ptr, long *value)
 parse_t parse_imm(char **ptr, char **name, long *value)
 {
     /* skip the blank and check */
+    SKIP_BLANK(*ptr);
+
 
     /* if IS_IMM, then parse the digit */
+    if (**ptr == "$") {
+      *ptr = *ptr + 1;
+      if (!IS_DIGIT(*ptr)) {
+        return PARSE_ERR;
+      }
+      char *endptr;
+      *value = strtoul(*ptr, &endptr, 0);
+      *ptr = endptr;
+      return PARSE_DIGIT;
+    }
 
     /* if IS_LETTER, then parse the symbol */
-    
-    /* set 'ptr' and 'name' or 'value' */
+    if (IS_LETTER(*ptr)) {
+      if (parse_symbol(*ptr, *name) == PARSE_ERR) {
+        return PARSE_ERR;
+      }
+      return PARSE_SYMBOL;
+    }
 
+    /* set 'ptr' and 'name' or 'value' */
     return PARSE_ERR;
 }
 
@@ -350,12 +407,30 @@ parse_t parse_imm(char **ptr, char **name, long *value)
 parse_t parse_mem(char **ptr, long *value, regid_t *regid)
 {
     /* skip the blank and check */
+    SKIP_BLANK(*ptr);
 
     /* calculate the digit and register, (ex: (%rbp) or 8(%rbp)) */
+    if (**ptr == "(") {
+      *value = 0;
+    }else {
+      if (parse_digit(*ptr, value) == PARSE_ERR) {
+        return PARSE_ERR;
+      }
+    }
+    if (**ptr != "(") {
+      return PARSE_ERR;
+    }
+    *ptr = *ptr + 1;
+    if (parse_reg(*ptr, regid) == PARSE_ERR) {
+      return PARSE_ERR;
+    }
 
     /* set 'ptr', 'value' and 'regid' */
-
-    return PARSE_ERR;
+    if (**ptr != ")") {
+      return PARSE_ERR;
+    }
+    *ptr = *ptr + 1;
+    return PARSE_MEM;
 }
 
 /*
@@ -377,13 +452,25 @@ parse_t parse_mem(char **ptr, long *value, regid_t *regid)
 parse_t parse_data(char **ptr, char **name, long *value)
 {
     /* skip the blank and check */
+    SKIP_BLANK(*ptr);
 
     /* if IS_DIGIT, then parse the digit */
+    if (IS_DIGIT(*ptr)) {
+      char *endptr;
+      *value = strtoul(*ptr, &endptr, 0);
+      *ptr = endptr;
+      return PARSE_DIGIT;
+    }
 
     /* if IS_LETTER, then parse the symbol */
+    if (IS_LETTER(*ptr)) {
+      if (parse_symbol(*ptr, *name) == PARSE_ERR) {
+        return PARSE_ERR;
+      }
+      return PARSE_SYMBOL;
+    }
 
     /* set 'ptr', 'name' and 'value' */
-
     return PARSE_ERR;
 }
 
@@ -401,12 +488,25 @@ parse_t parse_data(char **ptr, char **name, long *value)
 parse_t parse_label(char **ptr, char **name)
 {
     /* skip the blank and check */
+    SKIP_BLANK(*ptr);
+    if (!IS_LETTER(*ptr)) {
+      return PARSE_ERR;
+    }
 
     /* allocate name and copy to it */
+    **name = (char *)malloc(MAX_INSLEN);
+    int pos = 0;
+    while (IS_LETTER(*ptr+p) || IS_DIGIT(*ptr+p)) {
+      *(*name + p) = *(*ptr + p);
+      p = p + 1;
+    }
+    if (*(*ptr + p) != ":") {
+      return PARSE_ERR;
+    }
 
     /* set 'ptr' and 'name' */
-
-    return PARSE_ERR;
+    *ptr = *ptr + p + 1;
+    return PARSE_LABEL;
 }
 
 /*
