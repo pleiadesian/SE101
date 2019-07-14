@@ -108,7 +108,14 @@ symbol_t *symtab = NULL;
  */
 symbol_t *find_symbol(char *name)
 {
-    return NULL;
+  symbol_t *tempsym = symtab->next;
+  while (tempsym != NULL) {
+    if (!strcmp(tempsym->name, name)) {
+      return tempsym;
+    }
+    tempsym = tempsym->next;
+  }
+  return NULL;
 }
 
 /*
@@ -123,11 +130,22 @@ symbol_t *find_symbol(char *name)
 int add_symbol(char *name)
 {
     /* check duplicate */
+    if (find_symbol(name) != NULL) {
+      err_print("duplicate symbol: %s", name);
+      return -1;
+    }
 
     /* create new symbol_t (don't forget to free it)*/
+    symbol_t *tempsym = (symbol_t *)malloc(sizeof(symbol_t));
+    memset(tempsym, 0, sizeof(symbol_t));
+    tempsym->name = name;
 
     /* add the new symbol_t to symbol table */
-
+    symbol_t *symlast = symtab->next;
+    while (symlast->next != NULL) {
+      symlast = symlast->next;
+    }
+    symlast->next = tempsym;
     return 0;
 }
 
@@ -146,8 +164,18 @@ reloc_t *reltab = NULL;
 void add_reloc(char *name, bin_t *bin)
 {
     /* create new reloc_t (don't forget to free it)*/
-    
+    reloc_t *temprel = (reloc_t *)malloc(sizeof(reloc_t));
+    memset(temprel, 0, sizeof(reloc_t));
+    temprel->name = name;
+    temprel->y64bin = bin;
+
     /* add the new reloc_t to relocation table */
+    reloc_t *lastrel = reltab->next;
+    while (lastrel->next != NULL) {
+      lastrel = lastrel->next
+    }
+    lastrel->next = temprel;
+    return 0;
 }
 
 
@@ -417,8 +445,7 @@ type_t parse_line(line_t *line)
     if (parse_label(&templine, &tempname) == PARSE_LABEL) {
       if (add_symbol(tempname) == -1) {
         line->type = TYPE_ERR;
-        err_print("add symbol error: %s", tempname);
-        break;
+        return line->type;
       }
       symbol_t *tempsym = find_symbol(tempname);
       tempsym->addr = vmaddr;
@@ -729,10 +756,27 @@ int relocate(void)
  */
 int binfile(FILE *out)
 {
-    /* prepare image with y64 binary code */
+    /* prepare image with&(stmp->addr) y64 binary code */
+    line_t *headline = line_head->next;
+    line_t *templine = headline;
+    int filesize = 0;
+    while (templine != NULL) {
+      if (templine->type == TYPE_INS && templine->y64bin.bytes > 0) {
+        filesize = templine->y64bin.addr + templine->y64bin.bytes;
+      }
+      templine = templine->next;
+    }
+    byte_t *image = (byte_t *)malloc(filesize);
+    while (templine != NULL) {
+      if (templine->type == TYPE_INS && templine->y64bin.bytes > 0) {
+        memcpy(image + templine->y64bin.addr, templine->y64bin.codes, templine->y64bin.bytes);
+      }
+      templine = templine->next;
+    }
 
     /* binary write y64 code to output file (NOTE: see fwrite()) */
-    
+    fwrite(image, filesize, 1, out);
+    free(image);
     return 0;
 }
 
