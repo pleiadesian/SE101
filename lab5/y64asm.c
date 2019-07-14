@@ -172,10 +172,9 @@ void add_reloc(char *name, bin_t *bin)
     /* add the new reloc_t to relocation table */
     reloc_t *lastrel = reltab->next;
     while (lastrel->next != NULL) {
-      lastrel = lastrel->next
+      lastrel = lastrel->next;
     }
     lastrel->next = temprel;
-    return 0;
 }
 
 
@@ -223,7 +222,7 @@ parse_t parse_instr(char **ptr, instr_t **inst)
     }
 
     /* set 'ptr' and 'inst' */
-    *ptr = *ptr + (*inst)->bytes;
+    *ptr = *ptr + (*inst)->len;
     return PARSE_INSTR;
 }
 
@@ -270,18 +269,19 @@ parse_t parse_reg(char **ptr, regid_t *regid)
 
     /* find register */
     char tempinstr[MAX_INSLEN] = "";
-    int pos = 1;
+    int p = 1;
     while (IS_LETTER(*ptr+p) || IS_DIGIT(*ptr+p)) {
       p = p + 1;
     }
     strncpy(tempinstr, *ptr, p);
-    *regid = find_register(tempinstr);
-    if (*regid == NULL) {
+    const reg_t *tempreg = find_register(tempinstr);
+    if (tempreg == NULL) {
       return PARSE_ERR;
     }
 
     /* set 'ptr' and 'regid' */
     *ptr = *ptr + p;
+    *regid = tempreg->id;
     return PARSE_REG;
 }
 
@@ -305,8 +305,8 @@ parse_t parse_symbol(char **ptr, char **name)
     }
 
     /* allocate name and copy to it */
-    **name = (char *)malloc(MAX_INSLEN);
-    int pos = 0;
+    *name = (char *)malloc(MAX_INSLEN);
+    int p = 0;
     while (IS_LETTER(*ptr+p) || IS_DIGIT(*ptr+p)) {
       *(*name + p) = *(*ptr + p);
       p = p + 1;
@@ -368,7 +368,7 @@ parse_t parse_imm(char **ptr, char **name, long *value)
 
 
     /* if IS_IMM, then parse the digit */
-    if (**ptr == "$") {
+    if (**ptr == '$') {
       *ptr = *ptr + 1;
       if (!IS_DIGIT(*ptr)) {
         return PARSE_ERR;
@@ -381,7 +381,7 @@ parse_t parse_imm(char **ptr, char **name, long *value)
 
     /* if IS_LETTER, then parse the symbol */
     if (IS_LETTER(*ptr)) {
-      if (parse_symbol(*ptr, *name) == PARSE_ERR) {
+      if (parse_symbol(ptr, name) == PARSE_ERR) {
         return PARSE_ERR;
       }
       return PARSE_SYMBOL;
@@ -410,23 +410,23 @@ parse_t parse_mem(char **ptr, long *value, regid_t *regid)
     SKIP_BLANK(*ptr);
 
     /* calculate the digit and register, (ex: (%rbp) or 8(%rbp)) */
-    if (**ptr == "(") {
+    if (**ptr == '(') {
       *value = 0;
     }else {
-      if (parse_digit(*ptr, value) == PARSE_ERR) {
+      if (parse_digit(ptr, value) == PARSE_ERR) {
         return PARSE_ERR;
       }
     }
-    if (**ptr != "(") {
+    if (**ptr != '(') {
       return PARSE_ERR;
     }
     *ptr = *ptr + 1;
-    if (parse_reg(*ptr, regid) == PARSE_ERR) {
+    if (parse_reg(ptr, regid) == PARSE_ERR) {
       return PARSE_ERR;
     }
 
     /* set 'ptr', 'value' and 'regid' */
-    if (**ptr != ")") {
+    if (**ptr != ')') {
       return PARSE_ERR;
     }
     *ptr = *ptr + 1;
@@ -464,7 +464,7 @@ parse_t parse_data(char **ptr, char **name, long *value)
 
     /* if IS_LETTER, then parse the symbol */
     if (IS_LETTER(*ptr)) {
-      if (parse_symbol(*ptr, *name) == PARSE_ERR) {
+      if (parse_symbol(ptr, name) == PARSE_ERR) {
         return PARSE_ERR;
       }
       return PARSE_SYMBOL;
@@ -494,13 +494,13 @@ parse_t parse_label(char **ptr, char **name)
     }
 
     /* allocate name and copy to it */
-    **name = (char *)malloc(MAX_INSLEN);
-    int pos = 0;
+    *name = (char *)malloc(MAX_INSLEN);
+    int p = 0;
     while (IS_LETTER(*ptr+p) || IS_DIGIT(*ptr+p)) {
       *(*name + p) = *(*ptr + p);
       p = p + 1;
     }
-    if (*(*ptr + p) != ":") {
+    if (*(*ptr + p) != ':') {
       return PARSE_ERR;
     }
 
@@ -561,6 +561,7 @@ type_t parse_line(line_t *line)
     if (parse_instr(&templine, &tempinst) == PARSE_ERR) {
       line->type = TYPE_ERR;
       err_print("invalid instruction");
+      return line->type;
     }
 
     /* set type and y64bin */
@@ -575,7 +576,7 @@ type_t parse_line(line_t *line)
     /* parse the rest of instruction according to the itype */
     regid_t *rega = NULL;
     regid_t *regb = NULL;
-    parse_t parsetype;
+    parse_t parsetype = PARSE_ERR;
     long *value;
     switch (HIGH(tempinst->code)) {
       case I_HALT:
@@ -600,7 +601,7 @@ type_t parse_line(line_t *line)
       case I_IRMOVQ: /* irmovq symbol, %rax */
         parsetype = parse_imm(&templine, &tempname, value);
         if (parsetype == PARSE_SYMBOL) {
-          add_reloc(&tempname, &line->y64bin);
+          add_reloc(tempname, &line->y64bin);
         }else if (parsetype == PARSE_DIGIT) {
           memcpy(line->y64bin.codes + 2, (void *)&value, sizeof(long));
         }else{
@@ -611,7 +612,7 @@ type_t parse_line(line_t *line)
           line->type = TYPE_ERR;
           return TYPE_ERR;
         }
-        if (parse_reg(templine, regb) != PARSE_REG) {
+        if (parse_reg(&templine, regb) != PARSE_REG) {
           line->type = TYPE_ERR;
           return TYPE_ERR;
         }
@@ -670,7 +671,7 @@ type_t parse_line(line_t *line)
           line->type = TYPE_ERR;
           return TYPE_ERR;
         }
-        add_reloc(&tempname, &line->y64bin);
+        add_reloc(tempname, &line->y64bin);
         break;
       case I_PUSHQ:
       case I_POPQ:
@@ -678,10 +679,10 @@ type_t parse_line(line_t *line)
           line->type = TYPE_ERR;
           return TYPE_ERR;
         }
-        line->y64bin.codes[1] = HPACK(&rega, REG_NONE);
+        line->y64bin.codes[1] = HPACK(*rega, REG_NONE);
         break;
       case I_DIRECTIVE:
-        if (!strcpm(tempinst->name, ".pos")) {
+        if (!strcpy(tempinst->name, ".pos")) {
           if (parse_digit(&templine, value) == PARSE_ERR) {
             line->type = TYPE_ERR;
             return line->type;
@@ -694,14 +695,14 @@ type_t parse_line(line_t *line)
             return line->type;
           }
           if (vmaddr % *value != 0) {
-            vmaddr = vmaddr + (value - vmaddr % *value);
+            vmaddr = vmaddr + (*value - vmaddr % *value);
           }
         }else if (!strcmp(tempinst->name, ".byte")) {
           parsetype = parse_data(&templine, &tempname, value);
           if (parsetype == PARSE_DIGIT) {
-            memcpy(line->y64bin, value, 1);
+            memcpy(&line->y64bin, value, 1);
           }else if (parsetype == PARSE_SYMBOL) {
-            add_reloc(tempname, line->y64bin);
+            add_reloc(tempname, &line->y64bin);
           }else{
             line->type = TYPE_ERR;
             return line->type;
@@ -709,9 +710,9 @@ type_t parse_line(line_t *line)
         }else if (!strcmp(tempinst->name, ".word")) {
           parsetype = parse_data(&templine, &tempname, value);
           if (parsetype == PARSE_DIGIT) {
-            memcpy(line->y64bin, value, 2);
+            memcpy(&line->y64bin, value, 2);
           }else if (parsetype == PARSE_SYMBOL) {
-            add_reloc(tempname, line->y64bin);
+            add_reloc(tempname, &line->y64bin);
           }else{
             line->type = TYPE_ERR;
             return line->type;
@@ -719,9 +720,9 @@ type_t parse_line(line_t *line)
         }else if (!strcmp(tempinst->name, ".long")) {
           parsetype = parse_data(&templine, &tempname, value);
           if (parsetype == PARSE_DIGIT) {
-            memcpy(line->y64bin, value, 4);
+            memcpy(&line->y64bin, value, 4);
           }else if (parsetype == PARSE_SYMBOL) {
-            add_reloc(tempname, line->y64bin);
+            add_reloc(tempname, &line->y64bin);
           }else{
             line->type = TYPE_ERR;
             return line->type;
@@ -729,9 +730,9 @@ type_t parse_line(line_t *line)
         }else if (!strcmp(tempinst->name, ".quad")) {
           parsetype = parse_data(&templine, &tempname, value);
           if (parsetype == PARSE_DIGIT) {
-            memcpy(line->y64bin, value, 8);
+            memcpy(&line->y64bin, value, 8);
           }else if (parsetype == PARSE_SYMBOL) {
-            add_reloc(tempname, line->y64bin);
+            add_reloc(tempname, &line->y64bin);
           }else{
             line->type = TYPE_ERR;
             return line->type;
@@ -744,12 +745,12 @@ type_t parse_line(line_t *line)
         line->type = TYPE_ERR;
         return line->type;
     }
-
     SKIP_BLANK(templine);
     if (IS_END(templine) || IS_COMMENT(templine)) {
-      line->type = TYPE_ERR;
       return line->type;
     }
+    line->type = TYPE_ERR;
+    return line->type;
 }
 
 /*
@@ -813,29 +814,30 @@ int relocate(void)
     rtmp = reltab->next;
     while (rtmp) {
         /* find symbol */
-        symbol_t tempsym = find_symbol(rtmp->name);
+        symbol_t *tempsym = find_symbol(rtmp->name);
 
         /* relocate y64bin according itype */
+        int pos;
         switch (HIGH(rtmp->y64bin->codes[0])) {
           case I_IRMOVQ:
           case I_JMP:
           case I_CALL:
-            int pos = rtmp->y64bin->bytes - 8;
-            memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 8);
+            pos = rtmp->y64bin->bytes - 8;
+            memcpy(rtmp->y64bin->codes + pos, (void *)tempsym->addr, 8);
             break;
           case I_DIRECTIVE:
             if (!strcpy(rtmp->name, ".byte")) {
-              int pos = rtmp->y64bin->bytes - 1;
-              memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 1);
+              pos = rtmp->y64bin->bytes - 1;
+              memcpy(rtmp->y64bin->codes + pos, (void *)tempsym->addr, 1);
             }else if(!strcpy(rtmp->name, ".word")){
-              int pos = rtmp->y64bin->bytes - 2;
-              memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 2);
+              pos = rtmp->y64bin->bytes - 2;
+              memcpy(rtmp->y64bin->codes + pos, (void *)tempsym->addr, 2);
             }else if(!strcpy(rtmp->name, ".long")){
-              int pos = rtmp->y64bin->bytes - 4;
-              memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 4);
+              pos = rtmp->y64bin->bytes - 4;
+              memcpy(rtmp->y64bin->codes + pos, (void *)tempsym->addr, 4);
             }else if(!strcpy(rtmp->name, ".quad")){
-              int pos = rtmp->y64bin->bytes - 8;
-              memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 8);
+              pos = rtmp->y64bin->bytes - 8;
+              memcpy(rtmp->y64bin->codes + pos, (void *)tempsym->addr, 8);
             }
         }
 
@@ -901,19 +903,23 @@ void print_line(line_t *line)
 
     /* line format: 0xHHH: cccccccccccc | <line> */
     if (line->type == TYPE_INS) {
+//      err_print("coco");
         bin_t *y64bin = &line->y64bin;
         int i;
         
         strcpy(buf, "  0x000:                      | ");
-        
+//      err_print("addr:1");
         hexstuff(buf+4, y64bin->addr, 3);
         if (y64bin->bytes > 0)
             for (i = 0; i < y64bin->bytes; i++)
                 hexstuff(buf+9+2*i, y64bin->codes[i]&0xFF, 2);
     } else {
+//      err_print("addr:2");
         strcpy(buf, "                              | ");
+//      err_print("?");
     }
 
+  err_print("out");
     printf("%s%s\n", buf, line->y64asm);
 }
 
