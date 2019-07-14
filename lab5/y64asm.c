@@ -398,23 +398,231 @@ type_t parse_line(line_t *line)
 * e.g., 
 *  Loop: mrmovl (%rbp), %rcx
 *           call SUM  #invoke SUM function */
+    char *templine = line->y64asm;
+    char *tempname = NULL;
+    instr_t *tempinst = NULL;
 
     /* skip blank and check IS_END */
-    
+    SKIP_BLANK(templine);
+    if (IS_END(templine)) {
+      return TYPE_COMM;
+    }
+
     /* is a comment ? */
+    if (IS_COMMENT(templine)) {
+      return TYPE_COMM;
+    }
 
     /* is a label ? */
+    if (parse_label(&templine, &tempname) == PARSE_LABEL) {
+      if (add_symbol(tempname) == -1) {
+        line->type = TYPE_ERR;
+        err_print("add symbol error: %s", tempname);
+        break;
+      }
+      symbol_t *tempsym = find_symbol(tempname);
+      tempsym->addr = vmaddr;
+      SKIP_BLANK(templine);
+      if (IS_END(templine) || IS_COMMENT(templine)) {
+        line->type = TYPE_INS;
+        line->y64bin.addr = vmaddr;
+        return TYPE_INS;
+      }
+    }
 
     /* is an instruction ? */
+    if (parse_instr(&templine, &tempinst) == PARSE_ERR) {
+      line->type = TYPE_ERR;
+      err_print("invalid instruction");
+    }
 
     /* set type and y64bin */
+    line->type = TYPE_INS;
+    line->y64bin.addr = vmaddr;
+    line->y64bin.bytes = tempinst->bytes;
+    line->y64bin.codes[0] = tempinst->code;
 
-    /* update vmaddr */    
+    /* update vmaddr */
+    vmaddr = vmaddr + tempinst->bytes;
 
     /* parse the rest of instruction according to the itype */
+    regid_t *rega = NULL;
+    regid_t *regb = NULL;
+    parse_t parsetype;
+    long *value;
+    switch (HIGH(tempinst->code)) {
+      case I_HALT:
+      case I_NOP:
+      case I_RET:
+        break;
+      case I_RRMOVQ:
+        if (parse_reg(&templine, rega) == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_delim(&templine, ',') == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_reg(&templine, regb) == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        line->y64bin.codes[1] = HPACK(*rega, *regb);
+        break;
+      case I_IRMOVQ: /* irmovq symbol, %rax */
+        parsetype = parse_imm(&templine, &tempname, value);
+        if (parsetype == PARSE_SYMBOL) {
+          add_reloc(&tempname, &line->y64bin);
+        }else if (parsetype == PARSE_DIGIT) {
+          memcpy(line->y64bin.codes + 2, (void *)&value, sizeof(long));
+        }else{
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_delim(&templine, ',') == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_reg(templine, regb) != PARSE_REG) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        line->y64bin.codes[1] = HPACK(REG_NONE, *regb);
+        break;
+      case I_RMMOVQ: /* 4:0 regA:regB imm */
+        if (parse_reg(&templine, rega) == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_delim(&templine, ',') == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_mem(&templine, value, regb) == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        line->y64bin.codes[1] = HPACK(*rega, *regb);
+        memcpy(line->y64bin.codes + 2, (void *)&value, sizeof(long));
+        break;
+      case I_MRMOVQ: /* 5:0 regB:regA imm */
+        if (parse_mem(&templine, value, rega) == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_delim(&templine, ',') == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_reg(&templine, regb) == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        line->y64bin.codes[1] = HPACK(*rega, *regb);
+        memcpy(line->y64bin.codes + 2, (void *)&value, sizeof(long));
+        break;
+      case I_ALU: /* 6:x regA:regB */
+        if (parse_reg(&templine, rega) == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_delim(&templine, ',') == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        if (parse_reg(&templine, regb) == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        line->y64bin.codes[1] = HPACK(*rega, *regb);
+        break;
+      case I_JMP:
+      case I_CALL:
+        if (parse_symbol(&templine, &tempname)) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        add_reloc(&tempname, &line->y64bin);
+        break;
+      case I_PUSHQ:
+      case I_POPQ:
+        if (parse_reg(&templine, rega) == PARSE_ERR) {
+          line->type = TYPE_ERR;
+          return TYPE_ERR;
+        }
+        line->y64bin.codes[1] = HPACK(&rega, REG_NONE);
+        break;
+      case I_DIRECTIVE:
+        if (!strcpm(tempinst->name, ".pos")) {
+          if (parse_digit(&templine, value) == PARSE_ERR) {
+            line->type = TYPE_ERR;
+            return line->type;
+          }
+          vmaddr = *value;
+          line->y64bin.addr = vmaddr;
+        }else if (!strcmp(tempinst->name, ".align")) {
+          if (parse_digit(&templine, value) == PARSE_ERR) {
+            line->type = TYPE_ERR;
+            return line->type;
+          }
+          if (vmaddr % *value != 0) {
+            vmaddr = vmaddr + (value - vmaddr % *value);
+          }
+        }else if (!strcmp(tempinst->name, ".byte")) {
+          parsetype = parse_data(&templine, &tempname, value);
+          if (parsetype == PARSE_DIGIT) {
+            memcpy(line->y64bin, value, 1);
+          }else if (parsetype == PARSE_SYMBOL) {
+            add_reloc(tempname, line->y64bin);
+          }else{
+            line->type = TYPE_ERR;
+            return line->type;
+          }
+        }else if (!strcmp(tempinst->name, ".word")) {
+          parsetype = parse_data(&templine, &tempname, value);
+          if (parsetype == PARSE_DIGIT) {
+            memcpy(line->y64bin, value, 2);
+          }else if (parsetype == PARSE_SYMBOL) {
+            add_reloc(tempname, line->y64bin);
+          }else{
+            line->type = TYPE_ERR;
+            return line->type;
+          }
+        }else if (!strcmp(tempinst->name, ".long")) {
+          parsetype = parse_data(&templine, &tempname, value);
+          if (parsetype == PARSE_DIGIT) {
+            memcpy(line->y64bin, value, 4);
+          }else if (parsetype == PARSE_SYMBOL) {
+            add_reloc(tempname, line->y64bin);
+          }else{
+            line->type = TYPE_ERR;
+            return line->type;
+          }
+        }else if (!strcmp(tempinst->name, ".quad")) {
+          parsetype = parse_data(&templine, &tempname, value);
+          if (parsetype == PARSE_DIGIT) {
+            memcpy(line->y64bin, value, 8);
+          }else if (parsetype == PARSE_SYMBOL) {
+            add_reloc(tempname, line->y64bin);
+          }else{
+            line->type = TYPE_ERR;
+            return line->type;
+          }
+        }else{
+          line->type = TYPE_ERR;
+          return line->type;
+        }
+      default:
+        line->type = TYPE_ERR;
+        return line->type;
+    }
 
-    line->type = TYPE_ERR;
-    return line->type;
+    SKIP_BLANK(templine);
+    if (IS_END(templine) || IS_COMMENT(templine)) {
+      line->type = TYPE_ERR;
+      return line->type;
+    }
 }
 
 /*
@@ -478,8 +686,31 @@ int relocate(void)
     rtmp = reltab->next;
     while (rtmp) {
         /* find symbol */
+        symbol_t tempsym = find_symbol(rtmp->name);
 
         /* relocate y64bin according itype */
+        switch (HIGH(rtmp->y64bin->codes[0])) {
+          case I_IRMOVQ:
+          case I_JMP:
+          case I_CALL:
+            int pos = rtmp->y64bin->bytes - 8;
+            memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 8);
+            break;
+          case I_DIRECTIVE:
+            if (!strcpy(rtmp->name, ".byte")) {
+              int pos = rtmp->y64bin->bytes - 1;
+              memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 1);
+            }else if(!strcpy(rtmp->name, ".word")){
+              int pos = rtmp->y64bin->bytes - 2;
+              memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 2);
+            }else if(!strcpy(rtmp->name, ".long")){
+              int pos = rtmp->y64bin->bytes - 4;
+              memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 4);
+            }else if(!strcpy(rtmp->name, ".quad")){
+              int pos = rtmp->y64bin->bytes - 8;
+              memcpy(rtmp->y64bin->codes + pos, (void *)&tempsym.addr, 8);
+            }
+        }
 
         /* next */
         rtmp = rtmp->next;
