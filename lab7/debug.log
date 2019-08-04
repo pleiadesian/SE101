@@ -1,0 +1,12 @@
+Measuring performance with gettimeofday().
+
+Testing mm malloc
+Reading tracefile: traces/coalescing-bal.rep
+Checking mm_malloc for correctness, ERROR [trace 0, line 7671]: mm_malloc failed.
+
+Results for mm malloc:
+trace  valid  util     ops      secs  Kops
+ 0        no     -       -         -     -
+Total            -       -         -     -
+
+Terminated with 1 errors
